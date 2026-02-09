@@ -163,8 +163,9 @@ const QUESTIONS = [
   }
 },
 
-{ id:"q18c", type:"yesno",
+{ id:"q18c", type:"choice",
   text:"Jusqu’à laisser des bleus ?",
+  options:["oui","non"],
   next:"q18d"
 },
 
@@ -174,9 +175,10 @@ const QUESTIONS = [
   next:"q18e"
 },
 
-{ id:"q18e", type:"yesno",
+{ id:"q18e", type:"choice",
   text:"Utilisation d’un fouet ?",
-  onYes:"q18f", onNo:"q18g"
+  options:["oui","non"],
+  next: "q18f"
 },
 
 { id:"q18f", type:"choice",
@@ -217,15 +219,23 @@ const QUESTIONS = [
   options:["Personne adulte","Enfant","membre de la famille"],
   next:"q20b"
 },
-{ id:"q20b", type:"yesno",
+{ id:"q20b", type:"choice",
   text:"Es-tu allé jusqu’à l’orgasme ?",
-  onYes:"q20c", onNo:"q21"
+  options:["Oui","Non"],
+  nextMap:{
+    "Oui":"q20c",
+    "Non":"q21",
+  }
 },
-{ id:"q20c", type:"yesno",
+{ id:"q20c", type:"choice",
   text:"A t'il reçu du sperme/mouille sur lui?",
-  onYes:"q20d", onNo:"q21"
+  options:["Oui","Non"],
+  nextMap:{
+    "Oui":"q20d",
+    "Non":"q21",
+  }
 },
-{ id:"q20d", type:"yesno",
+{ id:"q20d", type:"choice",
   text:"Était-ce volontaire ?",
   next:"q21"
 },
@@ -250,8 +260,9 @@ const QUESTIONS = [
   next:"q22b"
 },
 
-{ id:"q22b", type:"yesno",
+{ id:"q22b", type:"choice",
   text:"As-tu déjà appris cela à ton meilleur ami ?",
+  options:["Oui","Non"],
   next:"q23"
 },
 
@@ -300,9 +311,13 @@ const QUESTIONS = [
   onYes:"q27a", onNo:"q28"
 },
 
-{ id:"q27a", type:"yesno",
+{ id:"q27a", type:"choice",
   text:"Était-ce pendant un rapport sexuel ?",
-  onYes:"q27b", onNo: "q28"
+  options:["Oui","Non"],
+  nextMap:{
+    "Oui":"q27b",
+    "Non":"q28",
+  }
 },
 { id:"q27b", type:"choice",
   text:"Sur qui ?",
@@ -312,7 +327,11 @@ const QUESTIONS = [
   
 { id:"q28", type:"yesno",
   text:"T’es-tu déjà masturbé alors qu’un animal était dans la piece ?",
-  onYes:"q28a", onNo:"q29"
+  options:["Oui","Non"],
+  nextMap:{
+    "Oui":"q28a",
+    "Non":"q29",
+  }
 },
 
 { id:"q28a", type:"choice",
@@ -320,28 +339,37 @@ const QUESTIONS = [
   options:["chien","chat","lapin","hamster","autre"],
   next:"q28b"
 },
-{ id:"q20b", type:"yesno",
+{ id:"q28b", type:"choice",
   text:"Es-tu allé jusqu’à l’orgasme ?",
-  onYes:"q28c", onNo:"q29"
+  options:["Oui","Non"],
+  nextMap:{
+    "Oui":"q28c",
+    "Non":"q29",
+  }
 },
-{ id:"q28c", type:"yesno",
+{ id:"q28c", type:"choice",
   text:"A t'il reçu du sperme/mouille sur lui?",
-  onYes:"q28d", onNo:"q29"
+  options:["Oui","Non"],
+  nextMap:{
+    "Oui":"q28d",
+    "Non":"q29",
+  }
 },
-{ id:"q28d", type:"yesno",
+{ id:"q28d", type:"choice",
   text:"Était-ce volontaire ?",
   next:"q29"
 },
 
 { id:"q29", type:"yesno",
   text:"A tu dejà penser à avoir un rapport sexuel avec un animal ?",
-  onYes:"q29a", onNo:"q30"
+  onYes:"q29a", onNo: null
 },
-{ id:"q28a", type:"choice",
+
+{ id:"q29a", type:"choice",
   text:"Quel type d'animal ?",
   options:["chien","chat","lapin","hamster","cheval","animaux de ferme","autre"],
-  next:"q30"
-
+  next: null
+},
 ];
 
 
