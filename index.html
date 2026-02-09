@@ -237,6 +237,7 @@ const QUESTIONS = [
 },
 { id:"q20d", type:"choice",
   text:"Était-ce volontaire ?",
+  
   next:"q21"
 },
 
@@ -357,18 +358,19 @@ const QUESTIONS = [
 },
 { id:"q28d", type:"choice",
   text:"Était-ce volontaire ?",
+  options:["Oui","Non"],
   next:"q29"
 },
 
 { id:"q29", type:"yesno",
   text:"A tu dejà penser à avoir un rapport sexuel avec un animal ?",
-  onYes:"q29a", onNo: null
+  onYes:"q29a", onNo: "q30"
 },
 
 { id:"q29a", type:"choice",
   text:"Quel type d'animal ?",
   options:["chien","chat","lapin","hamster","cheval","animaux de ferme","autre"],
-  next: null
+  next: "q30"
 },
 
 { id:"q30", type:"yesno",
