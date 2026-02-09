@@ -237,8 +237,8 @@ const QUESTIONS = [
 },
 { id:"q20d", type:"choice",
   text:"Était-ce volontaire ?",
-  
-  next:"q21"
+  options: ["Oui", "Non"],
+  next: "q21"
 },
 
 // ===== Intervention d’un proche =====
@@ -316,8 +316,8 @@ const QUESTIONS = [
   text:"Était-ce pendant un rapport sexuel ?",
   options:["Oui","Non"],
   nextMap:{
-    "Oui":"q27b",
-    "Non":"q28",
+  "Oui":"q27b",
+  "Non":"q28",
   }
 },
 { id:"q27b", type:"choice",
@@ -328,12 +328,8 @@ const QUESTIONS = [
   
 { id:"q28", type:"yesno",
   text:"T’es-tu déjà masturbé alors qu’un animal était dans la piece ?",
-  options:["Oui","Non"],
-  nextMap:{
-    "Oui":"q28a",
-    "Non":"q29",
-  }
-},
+  onYes: "q28a", onNo:  "q29",
+  },
 
 { id:"q28a", type:"choice",
   text:"Quel type d'animal était présent ?",
