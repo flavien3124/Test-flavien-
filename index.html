@@ -195,15 +195,153 @@ const QUESTIONS = [
 
 { id:"q19", type:"yesno",
   text:"As-tu déjà fait ou reçu des griffures pendant un ébat ?",
-  onYes:"q19a", onNo:null
+  onYes:"q19a", onNo:"q20"
 },
 
 { id:"q19a", type:"choice",
   text:"Qui a fait les griffures ?",
   options:["Toi","Partenaire","Les deux"],
-  next:null
+  next: "q20"
 },
   
+  // ===== Situation intime en présence d’un tiers =====
+
+
+{ id:"q20", type:"yesno",
+  text:"T’es-tu déjà masturbé alors qu’une autre personne non concerné était présent dans la pièce ?",
+  onYes:"q20a", onNo:"q21"
+},
+
+{ id:"q20a", type:"choice",
+  text:"Quel type de tiers était présent ?",
+  options:["Personne adulte","Enfant","membre de la famille"],
+  next:"q20b"
+},
+{ id:"q20b", type:"yesno",
+  text:"Es-tu allé jusqu’à l’orgasme ?",
+  onYes:"q20c", onNo:"q21"
+},
+{ id:"q20c", type:"yesno",
+  text:"A t'il reçu du sperme/mouille sur lui?",
+  onYes:"q20d", onNo:"q21"
+},
+{ id:"q20d", type:"yesno",
+  text:"Était-ce volontaire ?",
+  next:"q21"
+},
+
+// ===== Intervention d’un proche =====
+
+{ id:"q21", type:"yesno",
+  text:"Un membre de ta famille a-t-il déjà dû gérer les conséquences d’un acte intime te concernant ?",
+  next:"q22"
+},
+
+// ===== Transmission / apprentissage =====
+
+{ id:"q22", type:"yesno",
+  text:"As-tu déjà appris à quelqu’un comment se masturber ?",
+  onYes:"q22a", onNo:"q23"
+},
+
+{ id:"q22a", type:"choice",
+  text:"À combien de personnes ?",
+  options:["1","2","3","4","5–10","10+"],
+  next:"q22b"
+},
+
+{ id:"q22b", type:"yesno",
+  text:"As-tu déjà appris cela à ton meilleur ami ?",
+  next:"q23"
+},
+
+// ===== Situations diverses =====
+
+{ id:"q23", type:"yesno",
+  text:"As-tu déjà répondu à un appel téléphonique en plein ébat ?",
+  next:"q24"
+},
+
+{ id:"q24", type:"yesno",
+  text:"As-tu déjà uriné dans le capot d’une voiture ?",
+  next:"q25"
+},
+
+// ===== Virginité =====
+
+{ id:"q25", type:"yesno",
+  text:"As-tu déjà fait perdre la virginité à quelqu’un ?",
+  onYes:"q25a", onNo:"q26"
+},
+
+{ id:"q25a", type:"choice",
+  text:"À combien de personnes ?",
+  options:["1","2","3","4","5–10","10+"],
+  next:"q26"
+},
+
+// ===== Pratique spécifique =====
+
+{ id:"q26", type:"yesno",
+  text:"As-tu déjà pratiqué le “chocopouce” (doigt inséré dans l’anus) ?",
+  onYes:"q26a", onNo:"q27"
+},
+
+{ id:"q26a", type:"choice",
+  text:"Qui l’a reçu ?",
+  options:["Toi","Partenaire","Les deux"],
+  next:"q27"
+},
+
+// ===== Sextoys =====
+
+{ id:"q27", type:"yesno",
+  text:"As-tu déjà utilisé un sextoy ?",
+  onYes:"q27a", onNo:"q28"
+},
+
+{ id:"q27a", type:"yesno",
+  text:"Était-ce pendant un rapport sexuel ?",
+  onYes:"q27b", onNo: "q28"
+},
+{ id:"q27b", type:"choice",
+  text:"Sur qui ?",
+  options:["Toi","Partenaire","Les deux"],
+  next:"q28"
+},
+  
+{ id:"q28", type:"yesno",
+  text:"T’es-tu déjà masturbé alors qu’un animal était dans la piece ?",
+  onYes:"q28a", onNo:"q29"
+},
+
+{ id:"q28a", type:"choice",
+  text:"Quel type d'animal était présent ?",
+  options:["chien","chat","lapin","hamster","autre"],
+  next:"q28b"
+},
+{ id:"q20b", type:"yesno",
+  text:"Es-tu allé jusqu’à l’orgasme ?",
+  onYes:"q28c", onNo:"q29"
+},
+{ id:"q28c", type:"yesno",
+  text:"A t'il reçu du sperme/mouille sur lui?",
+  onYes:"q28d", onNo:"q29"
+},
+{ id:"q28d", type:"yesno",
+  text:"Était-ce volontaire ?",
+  next:"q29"
+},
+
+{ id:"q29", type:"yesno",
+  text:"A tu dejà penser à avoir un rapport sexuel avec un animal ?",
+  onYes:"q29a", onNo:"q30"
+},
+{ id:"q28a", type:"choice",
+  text:"Quel type d'animal ?",
+  options:["chien","chat","lapin","hamster","cheval","animaux de ferme","autre"],
+  next:"q30"
+
 ];
 
 
