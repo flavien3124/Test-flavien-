@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Test — Question par question</title>
+  <style>
+    :root{--bg:#0b0f17;--card:#121a2a;--txt:#e9eefc;--mut:#a9b4d0;--a:#ffcc33;--b:#ff4d6d;}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--txt);}
+    .wrap{max-width:820px;margin:0 auto;padding:22px 14px 60px;}
+    .card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:18px 16px;box-shadow:0 20px 60px rgba(0,0,0,.35);}
+    h1{margin:0 0 8px;font-size:22px;}
+    p{margin:8px 0;color:var(--mut);line-height:1.35}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .q{font-size:22px;font-weight:800;margin:10px 0 14px;}
+    .btn{border:none;border-radius:14px;padding:12px 14px;font-weight:900;cursor:pointer}
+    .yes{background:linear-gradient(90deg,var(--a),#ffe07a);color:#1b1403;}
+    .no{background:linear-gradient(90deg,var(--b),#ff93a6);color:#24030a;}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,.14);color:var(--txt);font-weight:800;}
+    .choices{display:flex;gap:10px;flex-wrap:wrap}
+    .choice{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--txt);}
+    .progress{height:10px;background:rgba(255,255,255,.10);border-radius:999px;overflow:hidden;margin-top:14px}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--a),var(--b));}
+    .small{font-size:13px;color:var(--mut);margin-top:10px}
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="screenIntro">
+    <h1>Test (contenu adulte)</h1>
+    <p>⚠️ 18+ • questions sexuelles / sensibles. Rien n’est envoyé : tout reste sur ton téléphone.</p>
+    <div class="row">
+      <button class="btn yes" id="startBtn">Commencer</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="screenQuiz">
+    <div class="small" id="counter"></div>
+    <div class="q" id="qText">—</div>
+
+    <div id="yesnoBlock" class="row hidden">
+      <button class="btn yes" id="btnYes">Oui</button>
+      <button class="btn no" id="btnNo">Non</button>
+    </div>
+
+    <div id="choiceBlock" class="choices hidden"></div>
+
+    <div class="progress"><div class="bar" id="bar"></div></div>
+
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" id="btnBack">Retour</button>
+      <button class="btn ghost" id="btnRestart">Recommencer</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="screenResult">
+    <h1>Résultat</h1>
+    <div class="q" id="resultMain">—</div>
+    <p id="resultText">—</p>
+    <div class="row">
+      <button class="btn yes" id="btnReplay">Rejouer</button>
+      <button class="btn ghost" id="btnCopy">Copier résultat</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/**
+ * TYPES
+ * - yesno : boutons Oui/Non
+ * - choice: liste de choix (boutons)
+ *
+ * BRANCHING
+ * - next: id question suivante (si pas de branchement)
+ * - onYes / onNo: id suivante selon réponse
+ */
+
+// --- 1) ÉCRIS TES QUESTIONS ICI ---
+const QUESTIONS = [
+  { id:"q1", type:"yesno", text:"J'ai déjà touché volontairement la bite de mon pote", next:"q2" },
+  
+  { id:"q2", type:"yesno", text:"Je me suis déjà exhibé dans un bar", next:"q3" },
+  
+  { id:"q3", type:"yesno", text:"J'ai déjà éjaculé dans une bouteille pour ne pas bouger de mon lit", 
+  onYes:"q3a", onNo:"q4" },},
+   { id:"q3a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q4" },
+
+
+  // Exemple demandé: si Oui -> question “combien ?”
+  { id:"q4", type:"yesno", text:"J'ai déjà embrassé une inconnue en boîte", onYes:"q4a", onNo:"q5" },
+  { id:"q4a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q5" },
+
+  { id:"q5", type:"yesno", text:"J'ai déjà trompé", next:"q6" },
+  { id:"q6", type:"yesno", text:"J'ai déjà été accusé de viol", next:"q7" },
+  { id:"q7", type:"yesno", text:"J'ai déjà touché à la drogue", next:"q8" },
+  { id:"q8", type:"yesno", text:"J'ai déjà eu des rapports homosexuels", next:"q9" },
+  
+  { id:"q9", type:"yesno", text:"J'ai déjà eu des relations avec mon cousin / ma cousine", next:"q10" },
+  
+  { id:"q10", type:"yesno", text:"Je me suis déjà fait violer 3 fois", next:"q11" },
+  
+  { id:"q11", type:"yesno", text:"J'ai déjà uriné sur ma mère", next:"q12" },
+  { id:"q12", type:"yesno", text:"Je me suis déjà fait frapper par mon père", next:"q13" },
+  
+  { id:"q13", type:"yesno", text:"Mon psy m'a déjà dit : « vous savez y'a des gens qui ont des vrais problèmes dans la vie »", next:null },
+];
+
+// --- 2) SCORE (comme un test de pureté) ---
+// Ici: on compte les "Oui" sur les yes/no seulement.
+function computePurity(yesCount, totalYesNo) {
+  return Math.round(((totalYesNo - yesCount) / totalYesNo) * 100);
+}
+function comment(purity){
+  if (purity >= 85) return "🕊️ Très pur";
+  if (purity >= 60) return "😇 Plutôt clean";
+  if (purity >= 35) return "😈 Zone grise";
+  return "🔥 Chaos";
+}
+
+// --- MOTEUR ---
+const map = new Map(QUESTIONS.map(q => [q.id, q]));
+const orderYesNoTotal = QUESTIONS.filter(q => q.type === "yesno").length;
+
+let currentId = null;
+let history = [];           // pile des IDs (pour Retour)
+let answers = {};           // id -> {type, value}
+let yesCount = 0;
+
+const $ = (id)=>document.getElementById(id);
+const screenIntro = $("screenIntro");
+const screenQuiz   = $("screenQuiz");
+const screenResult = $("screenResult");
+const qText = $("qText");
+const counter = $("counter");
+const bar = $("bar");
+const yesnoBlock = $("yesnoBlock");
+const choiceBlock = $("choiceBlock");
+
+function show(el){
+  [screenIntro, screenQuiz, screenResult].forEach(s => s.classList.add("hidden"));
+  el.classList.remove("hidden");
+}
+
+function resetAll(){
+  currentId = QUESTIONS[0]?.id ?? null;
+  history = [];
+  answers = {};
+  yesCount = 0;
+  if (currentId) render();
+}
+
+function progressYesNoDone(){
+  // nb de questions yesno déjà répondues
+  let done = 0;
+  for (const q of QUESTIONS){
+    if (q.type === "yesno" && answers[q.id]) done++;
+  }
+  return done;
+}
+
+function render(){
+  const q = map.get(currentId);
+  if (!q) return;
+
+  qText.textContent = q.text;
+
+  // progression sur les questions yesno (plus stable qu’avec les branches)
+  const done = progressYesNoDone();
+  counter.textContent = `Progression : ${done} / ${orderYesNoTotal}`;
+  bar.style.width = (orderYesNoTotal ? (done / orderYesNoTotal) * 100 : 0) + "%";
+
+  // Affichage selon type
+  yesnoBlock.classList.toggle("hidden", q.type !== "yesno");
+  choiceBlock.classList.toggle("hidden", q.type !== "choice");
+
+  if (q.type === "choice"){
+    choiceBlock.innerHTML = "";
+    q.options.forEach(opt => {
+      const b = document.createElement("button");
+      b.className = "btn choice";
+      b.textContent = opt;
+      b.onclick = () => answerChoice(opt);
+      choiceBlock.appendChild(b);
+    });
+  }
+}
+
+function go(nextId){
+  if (nextId === null || nextId === undefined){
+    return showResult();
+  }
+  history.push(currentId);
+  currentId = nextId;
+  render();
+}
+
+function answerYesNo(isYes){
+  const q = map.get(currentId);
+  if (!q || q.type !== "yesno") return;
+
+  // si on réécrit une réponse (cas retour), recalcul simple: on purge tout et on rejoue ? (plus complexe)
+  // Ici on bloque l’édition: Retour te fait revenir avant de répondre à nouveau.
+  answers[q.id] = { type:"yesno", value: isYes ? "Oui" : "Non" };
+  if (isYes) yesCount++;
+
+  const nextId = isYes ? (q.onYes ?? q.next) : (q.onNo ?? q.next);
+  go(nextId);
+}
+
+function answerChoice(value){
+  const q = map.get(currentId);
+  if (!q || q.type !== "choice") return;
+  answers[q.id] = { type:"choice", value };
+  go(q.next);
+}
+
+function back(){
+  if (history.length === 0) return;
+  // IMPORTANT: on retire la dernière réponse (celle de l’écran actuel) ? Ici l’écran actuel n’est pas répondu.
+  currentId = history.pop();
+
+  // Pour garder simple, si tu reviens et tu changes une réponse,
+  // on recalcule yesCount proprement depuis answers.
+  yesCount = 0;
+  for (const id in answers){
+    if (answers[id]?.type === "yesno" && answers[id].value === "Oui") yesCount++;
+  }
+
+  render();
+}
+
+function showResult(){
+  show(screenResult);
+
+  const purity = computePurity(yesCount, orderYesNoTotal);
+  $("resultMain").textContent = `Pureté : ${purity}%`;
+  $("resultText").textContent = `${comment(purity)} • Oui = ${yesCount}/${orderYesNoTotal}`;
+
+  window.__resultText = `Pureté: ${purity}% (Oui ${yesCount}/${orderYesNoTotal})`;
+}
+
+$("startBtn").onclick = () => { show(screenQuiz); resetAll(); };
+$("btnYes").onclick = () => answerYesNo(true);
+$("btnNo").onclick  = () => answerYesNo(false);
+$("btnBack").onclick = () => back();
+$("btnRestart").onclick = () => resetAll();
+$("btnReplay").onclick = () => { show(screenQuiz); resetAll(); };
+$("btnCopy").onclick = async () => {
+  try{
+    await navigator.clipboard.writeText(window.__resultText || "");
+    $("btnCopy").textContent = "Copié ✅";
+    setTimeout(()=> $("btnCopy").textContent = "Copier résultat", 1000);
+  } catch(e){
+    alert("Impossible de copier.");
+  }
+};
+</script>
+</body>
+</html>
