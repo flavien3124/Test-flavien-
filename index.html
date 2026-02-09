@@ -25,6 +25,7 @@
     .hidden{display:none!important}
   </style>
 </head>
+
 <body>
 <div class="wrap">
   <div class="card" id="screenIntro">
@@ -76,101 +77,39 @@
  * - onYes / onNo: id suivante selon réponse
  */
 
-// --- 1) ÉCRIS TES QUESTIONS ICI ---
 const QUESTIONS = [
   { id:"q1", type:"yesno", text:"As-tu déjà touché volontairement les parties intimes d'un camarade ?", next:"q2" },
-
   { id:"q2", type:"yesno", text:"T'es-tu déjà exhibé dans un bar ?", next:"q3" },
 
-  { 
-    id:"q3", type:"yesno",
-    text:"As-tu déjà éjaculé dans une bouteille pour ne pas bouger de ton lit ?",
-    onYes:"q3a", onNo:"q4"
-  },
-  { 
-    id:"q3a", type:"choice",
-    text:"Combien de fois ?",
-    options:["1","2","3","4","5–10","10+"],
-    next:"q4"
-  },
+  { id:"q3", type:"yesno", text:"As-tu déjà éjaculé dans une bouteille pour ne pas bouger de ton lit ?", onYes:"q3a", onNo:"q4" },
+  { id:"q3a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q4" },
 
-  { 
-    id:"q4", type:"yesno",
-    text:"As-tu déjà embrassé une inconnue en boîte ?",
-    onYes:"q4a", onNo:"q5"
-  },
-  { 
-    id:"q4a", type:"choice",
-    text:"Combien de fois ?",
-    options:["1","2","3","4","5–10","10+"],
-    next:"q5"
-  },
+  { id:"q4", type:"yesno", text:"As-tu déjà embrassé une inconnue en boîte ?", onYes:"q4a", onNo:"q5" },
+  { id:"q4a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q5" },
 
-  { 
-    id:"q5", type:"yesno",
-    text:"As-tu déjà trompé ?",
-    onYes:"q5a", onNo:"q6"
-  },
-  { 
-    id:"q5a", type:"choice",
-    text:"Combien de fois ?",
-    options:["1","2","3","4","5–10","10+"],
-    next:"q6"
-  },
+  { id:"q5", type:"yesno", text:"As-tu déjà trompé ?", onYes:"q5a", onNo:"q6" },
+  { id:"q5a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q6" },
 
   { id:"q6", type:"yesno", text:"As-tu déjà été accusé de viol ?", next:"q7" },
 
-  { 
-    id:"q7", type:"yesno",
-    text:"As-tu déjà touché à une drogue ?",
-    onYes:"q7a", onNo:"q8"
-  },
-  { 
-    id:"q7a", type:"choice",
-    text:"Combien de drogues différentes ?",
-    options:["1","2","3","4","5–10","10+"],
-    next:"q8"
-  },
+  { id:"q7", type:"yesno", text:"As-tu déjà touché à une drogue ?", onYes:"q7a", onNo:"q8" },
+  { id:"q7a", type:"choice", text:"Combien de drogues différentes ?", options:["1","2","3","4","5–10","10+"], next:"q8" },
 
   { id:"q8", type:"yesno", text:"As-tu déjà eu des rapports homosexuels ?", next:"q9" },
 
-  { 
-    id:"q9", type:"yesno",
-    text:"As-tu déjà eu des relations avec ton cousin / ta cousine ?",
-    onYes:"q9a", onNo:"q10"
-  },
-  { 
-    id:"q9a", type:"choice",
-    text:"Avec les deux ?",
-    options:["Oui","Non"],
-    next:"q10"
-  },
+  { id:"q9", type:"yesno", text:"As-tu déjà eu des relations avec ton cousin / ta cousine ?", onYes:"q9a", onNo:"q10" },
+  { id:"q9a", type:"choice", text:"Avec les deux ?", options:["Oui","Non"], next:"q10" },
 
   { id:"q10", type:"yesno", text:"T'es-tu déjà fait violer ?", next:"q11" },
-
   { id:"q11", type:"yesno", text:"As-tu déjà uriné sur ta mère ?", next:"q12" },
 
-  { 
-    id:"q12", type:"yesno",
-    text:"T'es-tu déjà fait frapper par ton père ?",
-    onYes:"q12a", onNo:"q13"
-  },
-  { 
-    id:"q12a", type:"choice",
-    text:"Les gendarmes ont-ils dû intervenir ?",
-    options:["Oui","Non"],
-    next:"q13"
-  },
+  { id:"q12", type:"yesno", text:"T'es-tu déjà fait frapper par ton père ?", onYes:"q12a", onNo:"q13" },
+  { id:"q12a", type:"choice", text:"Les gendarmes ont-ils dû intervenir ?", options:["Oui","Non"], next:"q13" },
 
-  { 
-    id:"q13", type:"yesno",
-    text:"Ton psy t'a déjà dit une phrase du genre : « vous savez, il y a des gens qui ont de vrais problèmes dans la vie » ?",
-    next:null
-  },
+  { id:"q13", type:"yesno", text:"Ton psy t'a déjà dit une phrase du genre : « vous savez, il y a des gens qui ont de vrais problèmes dans la vie » ?", next:null },
 ];
 
-// --- 2) SCORE (comme un test de pureté) ---
-// Ici: on compte les "Oui" sur les yes/no seulement.
+// Score “pureté”
 function computePurity(yesCount, totalYesNo) {
   return Math.round(((totalYesNo - yesCount) / totalYesNo) * 100);
 }
@@ -181,13 +120,13 @@ function comment(purity){
   return "🔥 Chaos";
 }
 
-// --- MOTEUR ---
+// Moteur
 const map = new Map(QUESTIONS.map(q => [q.id, q]));
 const orderYesNoTotal = QUESTIONS.filter(q => q.type === "yesno").length;
 
 let currentId = null;
-let history = [];           // pile des IDs (pour Retour)
-let answers = {};           // id -> {type, value}
+let history = [];
+let answers = {};
 let yesCount = 0;
 
 const $ = (id)=>document.getElementById(id);
@@ -214,7 +153,6 @@ function resetAll(){
 }
 
 function progressYesNoDone(){
-  // nb de questions yesno déjà répondues
   let done = 0;
   for (const q of QUESTIONS){
     if (q.type === "yesno" && answers[q.id]) done++;
@@ -228,12 +166,10 @@ function render(){
 
   qText.textContent = q.text;
 
-  // progression sur les questions yesno (plus stable qu’avec les branches)
   const done = progressYesNoDone();
   counter.textContent = `Progression : ${done} / ${orderYesNoTotal}`;
   bar.style.width = (orderYesNoTotal ? (done / orderYesNoTotal) * 100 : 0) + "%";
 
-  // Affichage selon type
   yesnoBlock.classList.toggle("hidden", q.type !== "yesno");
   choiceBlock.classList.toggle("hidden", q.type !== "choice");
 
@@ -262,8 +198,6 @@ function answerYesNo(isYes){
   const q = map.get(currentId);
   if (!q || q.type !== "yesno") return;
 
-  // si on réécrit une réponse (cas retour), recalcul simple: on purge tout et on rejoue ? (plus complexe)
-  // Ici on bloque l’édition: Retour te fait revenir avant de répondre à nouveau.
   answers[q.id] = { type:"yesno", value: isYes ? "Oui" : "Non" };
   if (isYes) yesCount++;
 
@@ -280,15 +214,16 @@ function answerChoice(value){
 
 function back(){
   if (history.length === 0) return;
-  // IMPORTANT: on retire la dernière réponse (celle de l’écran actuel) ? Ici l’écran actuel n’est pas répondu.
+
+  // on revient à la question précédente
   currentId = history.pop();
 
-  // Pour garder simple, si tu reviens et tu changes une réponse,
-  // on recalcule yesCount proprement depuis answers.
-  yesCount = 0;
-  for (const id in answers){
-    if (answers[id]?.type === "yesno" && answers[id].value === "Oui") yesCount++;
+  // IMPORTANT : on supprime la réponse de la question qu’on va réafficher
+  // (comme ça tu peux vraiment la changer)
+  if (answers[currentId]?.type === "yesno" && answers[currentId].value === "Oui") {
+    yesCount--;
   }
+  delete answers[currentId];
 
   render();
 }
@@ -303,20 +238,14 @@ function showResult(){
   window.__resultText = `Pureté: ${purity}% (Oui ${yesCount}/${orderYesNoTotal})`;
 }
 
+// Handlers
 $("startBtn").onclick = () => { show(screenQuiz); resetAll(); };
 $("btnYes").onclick = () => answerYesNo(true);
-<script>
-  document.getElementById("startBtn").addEventListener("click", () => {
-    // test simple
-    document.getElementById("screenIntro").classList.add("hidden");
-    document.getElementById("screenQuiz").classList.remove("hidden");
-  });
-</script>
-
 $("btnNo").onclick  = () => answerYesNo(false);
 $("btnBack").onclick = () => back();
 $("btnRestart").onclick = () => resetAll();
 $("btnReplay").onclick = () => { show(screenQuiz); resetAll(); };
+
 $("btnCopy").onclick = async () => {
   try{
     await navigator.clipboard.writeText(window.__resultText || "");
@@ -327,5 +256,6 @@ $("btnCopy").onclick = async () => {
   }
 };
 </script>
+
 </body>
 </html>
