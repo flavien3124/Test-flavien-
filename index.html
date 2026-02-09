@@ -78,32 +78,95 @@
 
 // --- 1) ÉCRIS TES QUESTIONS ICI ---
 const QUESTIONS = [
-  { id:"q1", type:"yesno", text:"J'ai déjà touché volontairement la bite de mon pote", next:"q2" },
-  
-  { id:"q2", type:"yesno", text:"Je me suis déjà exhibé dans un bar", next:"q3" },
-  
-  { id:"q3", type:"yesno", text:"J'ai déjà éjaculé dans une bouteille pour ne pas bouger de mon lit", 
-  onYes:"q3a", onNo:"q4" },},
-   { id:"q3a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q4" },
+  { id:"q1", type:"yesno", text:"As-tu déjà touché volontairement les parties intimes d'un camarade ?", next:"q2" },
 
+  { id:"q2", type:"yesno", text:"T'es-tu déjà exhibé dans un bar ?", next:"q3" },
 
-  // Exemple demandé: si Oui -> question “combien ?”
-  { id:"q4", type:"yesno", text:"J'ai déjà embrassé une inconnue en boîte", onYes:"q4a", onNo:"q5" },
-  { id:"q4a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q5" },
+  { 
+    id:"q3", type:"yesno",
+    text:"As-tu déjà éjaculé dans une bouteille pour ne pas bouger de ton lit ?",
+    onYes:"q3a", onNo:"q4"
+  },
+  { 
+    id:"q3a", type:"choice",
+    text:"Combien de fois ?",
+    options:["1","2","3","4","5–10","10+"],
+    next:"q4"
+  },
 
-  { id:"q5", type:"yesno", text:"J'ai déjà trompé", next:"q6" },
-  { id:"q6", type:"yesno", text:"J'ai déjà été accusé de viol", next:"q7" },
-  { id:"q7", type:"yesno", text:"J'ai déjà touché à la drogue", next:"q8" },
-  { id:"q8", type:"yesno", text:"J'ai déjà eu des rapports homosexuels", next:"q9" },
-  
-  { id:"q9", type:"yesno", text:"J'ai déjà eu des relations avec mon cousin / ma cousine", next:"q10" },
-  
-  { id:"q10", type:"yesno", text:"Je me suis déjà fait violer 3 fois", next:"q11" },
-  
-  { id:"q11", type:"yesno", text:"J'ai déjà uriné sur ma mère", next:"q12" },
-  { id:"q12", type:"yesno", text:"Je me suis déjà fait frapper par mon père", next:"q13" },
-  
-  { id:"q13", type:"yesno", text:"Mon psy m'a déjà dit : « vous savez y'a des gens qui ont des vrais problèmes dans la vie »", next:null },
+  { 
+    id:"q4", type:"yesno",
+    text:"As-tu déjà embrassé une inconnue en boîte ?",
+    onYes:"q4a", onNo:"q5"
+  },
+  { 
+    id:"q4a", type:"choice",
+    text:"Combien de fois ?",
+    options:["1","2","3","4","5–10","10+"],
+    next:"q5"
+  },
+
+  { 
+    id:"q5", type:"yesno",
+    text:"As-tu déjà trompé ?",
+    onYes:"q5a", onNo:"q6"
+  },
+  { 
+    id:"q5a", type:"choice",
+    text:"Combien de fois ?",
+    options:["1","2","3","4","5–10","10+"],
+    next:"q6"
+  },
+
+  { id:"q6", type:"yesno", text:"As-tu déjà été accusé de viol ?", next:"q7" },
+
+  { 
+    id:"q7", type:"yesno",
+    text:"As-tu déjà touché à une drogue ?",
+    onYes:"q7a", onNo:"q8"
+  },
+  { 
+    id:"q7a", type:"choice",
+    text:"Combien de drogues différentes ?",
+    options:["1","2","3","4","5–10","10+"],
+    next:"q8"
+  },
+
+  { id:"q8", type:"yesno", text:"As-tu déjà eu des rapports homosexuels ?", next:"q9" },
+
+  { 
+    id:"q9", type:"yesno",
+    text:"As-tu déjà eu des relations avec ton cousin / ta cousine ?",
+    onYes:"q9a", onNo:"q10"
+  },
+  { 
+    id:"q9a", type:"choice",
+    text:"Avec les deux ?",
+    options:["Oui","Non"],
+    next:"q10"
+  },
+
+  { id:"q10", type:"yesno", text:"T'es-tu déjà fait violer ?", next:"q11" },
+
+  { id:"q11", type:"yesno", text:"As-tu déjà uriné sur ta mère ?", next:"q12" },
+
+  { 
+    id:"q12", type:"yesno",
+    text:"T'es-tu déjà fait frapper par ton père ?",
+    onYes:"q12a", onNo:"q13"
+  },
+  { 
+    id:"q12a", type:"choice",
+    text:"Les gendarmes ont-ils dû intervenir ?",
+    options:["Oui","Non"],
+    next:"q13"
+  },
+
+  { 
+    id:"q13", type:"yesno",
+    text:"Ton psy t'a déjà dit une phrase du genre : « vous savez, il y a des gens qui ont de vrais problèmes dans la vie » ?",
+    next:null
+  },
 ];
 
 // --- 2) SCORE (comme un test de pureté) ---
