@@ -107,8 +107,8 @@ const QUESTIONS = [
   { id:"q12a", type:"choice", text:"Les gendarmes ont-ils dû intervenir ?", options:["Oui","Non"], next:"q13" },
 
   { id:"q13", type:"yesno", text:"Ton psy t'a déjà dit une phrase du genre : « vous savez, il y a des gens qui ont de vrais problèmes dans la vie » ?", next:"q14" },
-  // ===== Félation même sexe =====
-
+  
+    // ===== Félation même sexe =====
 { id:"q14", type:"yesno",
   text:"As-tu déjà fait ou reçu une fellation avec une personne du même sexe ?",
   onYes:"q14a", onNo:"q15"
@@ -370,6 +370,92 @@ const QUESTIONS = [
   options:["chien","chat","lapin","hamster","cheval","animaux de ferme","autre"],
   next: null
 },
+
+{ id:"q30", type:"yesno",
+  text:"As-tu déjà eu un rapport sexuel en présence d’une personne non concernée dans la pièce ?",
+  next:"q31"
+},
+
+{ id:"q31", type:"yesno",
+  text:"T’es-tu déjà dit : « si je retombe sur des fesses dans les 3 prochains scrolls, je vais sur Pornhub » ?",
+  next:"q32"
+},
+
+{ id:"q32", type:"yesno",
+  text:"T’es-tu déjà questionné sur l’orientation sexuelle ou les pratiques de personnages fictifs ?",
+  next:"q33"
+},
+
+{ id:"q33", type:"yesno",
+  text:"Connais-tu la règle 34 ?",
+  onYes:"q33a", onNo:"q34"
+},
+
+{ id:"q33a", type:"choice",
+  text:"L’as-tu déjà utilisée pour ton plaisir personnel ?",
+  options:["Oui","Non"],
+  next:"q34"
+},
+
+{ id:"q34", type:"yesno",
+  text:"Consommes-tu des hentais ?",
+  next:"q35"
+},
+
+{ id:"q35", type:"yesno",
+  text:"Te masturbes-tu quotidiennement ?",
+  onYes:"q35a", onNo:"q36"
+},
+
+{ id:"q35a", type:"choice",
+  text:"Combien de fois par semaine ?",
+  options:["1–2","3–4","5–6","7–8","9–10","10+"],
+  next:"q36"
+},
+
+{ id:"q36", type:"yesno",
+  text:"Considères-tu avoir été ou être addict à la masturbation ?",
+  onYes:"q36a", onNo:"q37"
+},
+
+{ id:"q36a", type:"choice",
+  text:"Nombre maximum de masturbations en une journée ?",
+  options:["1–3","4–7","8–12","13–20","20+"],
+  next:"q37"
+},
+
+{ id:"q37", type:"yesno",
+  text:"As-tu déjà participé à une golden shower ?",
+  next:"q38"
+},
+
+{ id:"q38", type:"yesno",
+  text:"As-tu déjà pris une douche avec une personne du sexe opposé (hors famille) ?",
+  next:"q39"
+},
+
+{ id:"q39", type:"yesno",
+  text:"As-tu déjà utilisé un doudou pour te masturber ?",
+  onYes:"q39a", onNo:null
+},
+
+{ id:"q39a", type:"choice",
+  text:"As-tu déjà fait un trou dans le doudou ?",
+  options:["Oui","Non"],
+  next:"q39b"
+},
+
+{ id:"q39b", type:"choice",
+  text:"As-tu déjà éjaculé sur ou dans le doudou ?",
+  options:["Oui","Non"],
+  next:null
+},
+
+
+
+
+
+
 ];
 
 
