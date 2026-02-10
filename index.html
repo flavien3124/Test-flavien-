@@ -23,6 +23,10 @@
     .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--a),var(--b));}
     .small{font-size:13px;color:var(--mut);margin-top:10px}
     .hidden{display:none!important}
+    table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+    th,td{padding:8px;text-align:left;border-top:1px solid rgba(255,255,255,0.1);}
+    th{background:rgba(255,255,255,0.08);}
+    small{font-size:0.8em;opacity:0.8;}
   </style>
 </head>
 
@@ -58,7 +62,7 @@
   <div class="card hidden" id="screenResult">
     <h1>Résultat</h1>
     <div class="q" id="resultMain">—</div>
-    <p id="resultText">—</p>
+    <div id="resultText">—</div>
     <div class="row">
       <button class="btn yes" id="btnReplay">Rejouer</button>
       <button class="btn ghost" id="btnCopy">Copier résultat</button>
@@ -67,462 +71,198 @@
 </div>
 
 <script>
-/**
- * TYPES
- * - yesno : boutons Oui/Non
- * - choice: liste de choix (boutons)
- *
- * BRANCHING
- * - next: id question suivante (si pas de branchement)
- * - onYes / onNo: id suivante selon réponse
- */
-
 const QUESTIONS = [
   { id:"q1", type:"yesno", text:"As-tu déjà touché volontairement les parties intimes d'un camarade ?", next:"q2" },
   { id:"q2", type:"yesno", text:"T'es-tu déjà exhibé dans un bar ?", next:"q3" },
-
   { id:"q3", type:"yesno", text:"As-tu déjà éjaculé dans une bouteille pour ne pas bouger de ton lit ?", onYes:"q3a", onNo:"q4" },
   { id:"q3a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q4" },
-
   { id:"q4", type:"yesno", text:"As-tu déjà embrassé une inconnue en boîte ?", onYes:"q4a", onNo:"q5" },
   { id:"q4a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q5" },
-
   { id:"q5", type:"yesno", text:"As-tu déjà trompé ?", onYes:"q5a", onNo:"q6" },
   { id:"q5a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q6" },
-
   { id:"q6", type:"yesno", text:"As-tu déjà été accusé de viol ?", next:"q7" },
-
   { id:"q7", type:"yesno", text:"As-tu déjà touché à une drogue ?", onYes:"q7a", onNo:"q8" },
   { id:"q7a", type:"choice", text:"Combien de drogues différentes ?", options:["1","2","3","4","5–10","10+"], next:"q8" },
-
   { id:"q8", type:"yesno", text:"As-tu déjà eu des rapports homosexuels ?", next:"q9" },
-
   { id:"q9", type:"yesno", text:"As-tu déjà eu des relations avec ton cousin / ta cousine ?", onYes:"q9a", onNo:"q10" },
   { id:"q9a", type:"choice", text:"Avec les deux ?", options:["Oui","Non"], next:"q10" },
-
   { id:"q10", type:"yesno", text:"T'es-tu déjà fait violer ?", next:"q11" },
   { id:"q11", type:"yesno", text:"As-tu déjà uriné sur ta mère ?", next:"q12" },
-
   { id:"q12", type:"yesno", text:"T'es-tu déjà fait frapper par ton père ?", onYes:"q12a", onNo:"q13" },
   { id:"q12a", type:"choice", text:"Les gendarmes ont-ils dû intervenir ?", options:["Oui","Non"], next:"q13" },
-
   { id:"q13", type:"yesno", text:"Ton psy t'a déjà dit une phrase du genre : « vous savez, il y a des gens qui ont de vrais problèmes dans la vie » ?", next:"q14" },
-  
-    // ===== Félation même sexe =====
-{ id:"q14", type:"yesno",
-  text:"As-tu déjà fait ou reçu une fellation avec une personne du même sexe ?",
-  onYes:"q14a", onNo:"q15"
-},
-
-{ id:"q14a", type:"choice",
-  text:"À quel âge la première fois ?",
-  options:["18–20","21–25","26–30","31–40","40+"],
-  next:"q15"
-},
-
-// ===== Lieux =====
-
-{ id:"q15", type:"yesno",
-  text:"As-tu déjà eu un rapport dans un parc pour enfants ?",
-  next:"q16"
-},
-
-{ id:"q16", type:"yesno",
-  text:"As-tu déjà eu un rapport dans une grande roue ?",
-  next:"q17"
-},
-
-// ===== Pratiques =====
-
-{ id:"q17", type:"yesno",
-  text:"As-tu déjà pratiqué l’anal ?",
-  next:"q18"
-},
-
-// ===== BDSM (bloc conditionnel) =====
-
-{ id:"q18", type:"yesno",
-  text:"As-tu déjà pratiqué le BDSM ?",
-  onYes:"q18a", onNo:"q19"
-},
-
-{ id:"q18a", type:"choice",
-  text:"Qui était attaché ?",
-  options:["Toi","Partenaire","Les deux","Personne"],
-  next:"q18b"
-},
-
-{ id:"q18b", type:"choice",
-  text:"Qui a été frappé ?",
-  options:["Toi","Partenaire","Les deux","Personne"],
-  nextMap:{
-    "Personne":"q18d",
-    "Toi":"q18c",
-    "Partenaire":"q18c",
-    "Les deux":"q18c"
-  }
-},
-
-{ id:"q18c", type:"choice",
-  text:"Jusqu’à laisser des bleus ?",
-  options:["oui","non"],
-  next:"q18d"
-},
-
-{ id:"q18d", type:"choice",
-  text:"Qui avait les yeux bandés ?",
-  options:["Toi","Partenaire","Les deux","Personne"],
-  next:"q18e"
-},
-
-{ id:"q18e", type:"choice",
-  text:"Utilisation d’un fouet ?",
-  options:["oui","non"],
-  next: "q18f"
-},
-
-{ id:"q18f", type:"choice",
-  text:"Giflé pendant un rapport ?",
-  options:["Toi","Partenaire","Les deux","Personne"],
-  next:"q19"
-},
-
-{ id:"q18g", type:"choice",
-  text:"Giflé pendant un rapport ?",
-  options:["Toi","Partenaire","Les deux","Personne"],
-  next:"q19"
-},
-
-// ===== Griffures =====
-
-{ id:"q19", type:"yesno",
-  text:"As-tu déjà fait ou reçu des griffures pendant un ébat ?",
-  onYes:"q19a", onNo:"q20"
-},
-
-{ id:"q19a", type:"choice",
-  text:"Qui a fait les griffures ?",
-  options:["Toi","Partenaire","Les deux"],
-  next: "q20"
-},
-  
-  // ===== Situation intime en présence d’un tiers =====
-
-
-{ id:"q20", type:"yesno",
-  text:"T’es-tu déjà masturbé alors qu’une autre personne non concerné était présent dans la pièce ?",
-  onYes:"q20a", onNo:"q21"
-},
-
-{ id:"q20a", type:"choice",
-  text:"Quel type de tiers était présent ?",
-  options:["Personne adulte","Enfant","membre de la famille"],
-  next:"q20b"
-},
-{ id:"q20b", type:"choice",
-  text:"Es-tu allé jusqu’à l’orgasme ?",
-  options:["Oui","Non"],
-  nextMap:{
-    "Oui":"q20c",
-    "Non":"q21",
-  }
-},
-{ id:"q20c", type:"choice",
-  text:"A t'il reçu du sperme/mouille sur lui?",
-  options:["Oui","Non"],
-  nextMap:{
-    "Oui":"q20d",
-    "Non":"q21",
-  }
-},
-{ id:"q20d", type:"choice",
-  text:"Était-ce volontaire ?",
-  options: ["Oui", "Non"],
-  next: "q21"
-},
-
-// ===== Intervention d’un proche =====
-
-{ id:"q21", type:"yesno",
-  text:"Un membre de ta famille a-t-il déjà dû gérer les conséquences d’un acte intime te concernant ?",
-  next:"q22"
-},
-
-// ===== Transmission / apprentissage =====
-
-{ id:"q22", type:"yesno",
-  text:"As-tu déjà appris à quelqu’un comment se masturber ?",
-  onYes:"q22a", onNo:"q23"
-},
-
-{ id:"q22a", type:"choice",
-  text:"À combien de personnes ?",
-  options:["1","2","3","4","5–10","10+"],
-  next:"q22b"
-},
-
-{ id:"q22b", type:"choice",
-  text:"As-tu déjà appris cela à ton meilleur ami ?",
-  options:["Oui","Non"],
-  next:"q23"
-},
-
-// ===== Situations diverses =====
-
-{ id:"q23", type:"yesno",
-  text:"As-tu déjà répondu à un appel téléphonique en plein ébat ?",
-  next:"q24"
-},
-
-{ id:"q24", type:"yesno",
-  text:"As-tu déjà uriné dans le capot d’une voiture ?",
-  next:"q25"
-},
-
-// ===== Virginité =====
-
-{ id:"q25", type:"yesno",
-  text:"As-tu déjà fait perdre la virginité à quelqu’un ?",
-  onYes:"q25a", onNo:"q26"
-},
-
-{ id:"q25a", type:"choice",
-  text:"À combien de personnes ?",
-  options:["1","2","3","4","5–10","10+"],
-  next:"q26"
-},
-
-// ===== Pratique spécifique =====
-
-{ id:"q26", type:"yesno",
-  text:"As-tu déjà pratiqué le “chocopouce” (doigt inséré dans l’anus) ?",
-  onYes:"q26a", onNo:"q27"
-},
-
-{ id:"q26a", type:"choice",
-  text:"Qui l’a reçu ?",
-  options:["Toi","Partenaire","Les deux"],
-  next:"q27"
-},
-
-// ===== Sextoys =====
-
-{ id:"q27", type:"yesno",
-  text:"As-tu déjà utilisé un sextoy ?",
-  onYes:"q27a", onNo:"q28"
-},
-
-{ id:"q27a", type:"choice",
-  text:"Était-ce pendant un rapport sexuel ?",
-  options:["Oui","Non"],
-  nextMap:{
-  "Oui":"q27b",
-  "Non":"q28",
-  }
-},
-{ id:"q27b", type:"choice",
-  text:"Sur qui ?",
-  options:["Toi","Partenaire","Les deux"],
-  next:"q28"
-},
-  
-{ id:"q28", type:"yesno",
-  text:"T’es-tu déjà masturbé alors qu’un animal était dans la piece ?",
-  onYes: "q28a", onNo:  "q29",
-  },
-
-{ id:"q28a", type:"choice",
-  text:"Quel type d'animal était présent ?",
-  options:["chien","chat","lapin","hamster","autre"],
-  next:"q28b"
-},
-{ id:"q28b", type:"choice",
-  text:"Es-tu allé jusqu’à l’orgasme ?",
-  options:["Oui","Non"],
-  nextMap:{
-    "Oui":"q28c",
-    "Non":"q29",
-  }
-},
-{ id:"q28c", type:"choice",
-  text:"A t'il reçu du sperme/mouille sur lui?",
-  options:["Oui","Non"],
-  nextMap:{
-    "Oui":"q28d",
-    "Non":"q29",
-  }
-},
-{ id:"q28d", type:"choice",
-  text:"Était-ce volontaire ?",
-  options:["Oui","Non"],
-  next:"q29"
-},
-
-{ id:"q29", type:"yesno",
-  text:"A tu dejà penser à avoir un rapport sexuel avec un animal ?",
-  onYes:"q29a", onNo: "q30"
-},
-
-{ id:"q29a", type:"choice",
-  text:"Quel type d'animal ?",
-  options:["chien","chat","lapin","hamster","cheval","animaux de ferme","autre"],
-  next: "q30"
-},
-
-{ id:"q30", type:"yesno",
-  text:"As-tu déjà eu un rapport sexuel en présence d’une personne non concernée dans la pièce ?",
-  next:"q31"
-},
-
-{ id:"q31", type:"yesno",
-  text:"T’es-tu déjà dit : « si je retombe sur des fesses dans les 3 prochains scrolls, je vais sur Pornhub » ?",
-  next:"q32"
-},
-
-{ id:"q32", type:"yesno",
-  text:"T’es-tu déjà questionné sur l’orientation sexuelle ou les pratiques de personnages fictifs ?",
-  next:"q33"
-},
-
-{ id:"q33", type:"yesno",
-  text:"Connais-tu la règle 34 ?",
-  onYes:"q33a", onNo:"q34"
-},
-
-{ id:"q33a", type:"choice",
-  text:"L’as-tu déjà utilisée pour ton plaisir personnel ?",
-  options:["Oui","Non"],
-  next:"q34"
-},
-
-{ id:"q34", type:"yesno",
-  text:"Consommes-tu des hentais ?",
-  next:"q35"
-},
-
-{ id:"q35", type:"yesno",
-  text:"Te masturbes-tu quotidiennement ?",
-  onYes:"q35a", onNo:"q36"
-},
-
-{ id:"q35a", type:"choice",
-  text:"Combien de fois par semaine ?",
-  options:["1–2","3–4","5–6","7–8","9–10","10+"],
-  next:"q36"
-},
-
-{ id:"q36", type:"yesno",
-  text:"Considères-tu avoir été ou être addict à la masturbation ?",
-  onYes:"q36a", onNo:"q37"
-},
-
-{ id:"q36a", type:"choice",
-  text:"Nombre maximum de masturbations en une journée ?",
-  options:["1–3","4–7","8–12","13–20","20+"],
-  next:"q37"
-},
-
-{ id:"q37", type:"yesno",
-  text:"As-tu déjà participé à une golden shower ?",
-  next:"q38"
-},
-
-{ id:"q38", type:"yesno",
-  text:"As-tu déjà pris une douche avec une personne du sexe opposé (hors famille) ?",
-  next:"q39"
-},
-
-{ id:"q39", type:"yesno",
-  text:"As-tu déjà utilisé un doudou pour te masturber ?",
-  onYes:"q39a", onNo:null
-},
-
-{ id:"q39a", type:"choice",
-  text:"As-tu déjà fait un trou dans le doudou ?",
-  options:["Oui","Non"],
-  next:"q39b"
-},
-
-{ id:"q39b", type:"choice",
-  text:"As-tu déjà éjaculé sur ou dans le doudou ?",
-  options:["Oui","Non"],
-  next:null
-},
-
-
-
-
-
-
+  { id:"q14", type:"yesno", text:"As-tu déjà fait ou reçu une fellation avec une personne du même sexe ?", onYes:"q14a", onNo:"q15" },
+  { id:"q14a", type:"choice", text:"À quel âge la première fois ?", options:["18–20","21–25","26–30","31–40","40+"], next:"q15" },
+  { id:"q15", type:"yesno", text:"As-tu déjà eu un rapport dans un parc pour enfants ?", next:"q16" },
+  { id:"q16", type:"yesno", text:"As-tu déjà eu un rapport dans une grande roue ?", next:"q17" },
+  { id:"q17", type:"yesno", text:"As-tu déjà pratiqué l’anal ?", next:"q18" },
+  { id:"q18", type:"yesno", text:"As-tu déjà pratiqué le BDSM ?", onYes:"q18a", onNo:"q19" },
+  { id:"q18a", type:"choice", text:"Qui était attaché ?", options:["Toi","Partenaire","Les deux","Personne"], next:"q18b" },
+  { id:"q18b", type:"choice", text:"Qui a été frappé ?", options:["Toi","Partenaire","Les deux","Personne"], nextMap:{ "Personne":"q18d", "Toi":"q18c", "Partenaire":"q18c", "Les deux":"q18c" } },
+  { id:"q18c", type:"choice", text:"Jusqu’à laisser des bleus ?", options:["oui","non"], next:"q18d" },
+  { id:"q18d", type:"choice", text:"Qui avait les yeux bandés ?", options:["Toi","Partenaire","Les deux","Personne"], next:"q18e" },
+  { id:"q18e", type:"choice", text:"Utilisation d’un fouet ?", options:["oui","non"], next:"q18f" },
+  { id:"q18f", type:"choice", text:"Giflé pendant un rapport ?", options:["Toi","Partenaire","Les deux","Personne"], next:"q19" },
+  { id:"q19", type:"yesno", text:"As-tu déjà fait ou reçu des griffures pendant un ébat ?", onYes:"q19a", onNo:"q20" },
+  { id:"q19a", type:"choice", text:"Qui a fait les griffures ?", options:["Toi","Partenaire","Les deux"], next:"q20" },
+  { id:"q20", type:"yesno", text:"T’es-tu déjà masturbé alors qu’une autre personne non concerné était présent dans la pièce ?", onYes:"q20a", onNo:"q21" },
+  { id:"q20a", type:"choice", text:"Quel type de tiers était présent ?", options:["Personne adulte","Enfant","membre de la famille"], next:"q20b" },
+  { id:"q20b", type:"choice", text:"Es-tu allé jusqu’à l’orgasme ?", options:["Oui","Non"], nextMap:{ "Oui":"q20c", "Non":"q21" } },
+  { id:"q20c", type:"choice", text:"A t'il reçu du sperme/mouille sur lui?", options:["Oui","Non"], nextMap:{ "Oui":"q20d", "Non":"q21" } },
+  { id:"q20d", type:"choice", text:"Était-ce volontaire ?", options:["Oui","Non"], next:"q21" },
+  { id:"q21", type:"yesno", text:"Un membre de ta famille a-t-il déjà dû gérer les conséquences d’un acte intime te concernant ?", next:"q22" },
+  { id:"q22", type:"yesno", text:"As-tu déjà appris à quelqu’un comment se masturber ?", onYes:"q22a", onNo:"q23" },
+  { id:"q22a", type:"choice", text:"À combien de personnes ?", options:["1","2","3","4","5–10","10+"], next:"q22b" },
+  { id:"q22b", type:"choice", text:"As-tu déjà appris cela à ton meilleur ami ?", options:["Oui","Non"], next:"q23" },
+  { id:"q23", type:"yesno", text:"As-tu déjà répondu à un appel téléphonique en plein ébat ?", next:"q24" },
+  { id:"q24", type:"yesno", text:"As-tu déjà uriné dans le capot d’une voiture ?", next:"q25" },
+  { id:"q25", type:"yesno", text:"As-tu déjà fait perdre la virginité à quelqu’un ?", onYes:"q25a", onNo:"q26" },
+  { id:"q25a", type:"choice", text:"À combien de personnes ?", options:["1","2","3","4","5–10","10+"], next:"q26" },
+  { id:"q26", type:"yesno", text:"As-tu déjà pratiqué le “chocopouce” (doigt inséré dans l’anus) ?", onYes:"q26a", onNo:"q27" },
+  { id:"q26a", type:"choice", text:"Qui l’a reçu ?", options:["Toi","Partenaire","Les deux"], next:"q27" },
+  { id:"q27", type:"yesno", text:"As-tu déjà utilisé un sextoy ?", onYes:"q27a", onNo:"q28" },
+  { id:"q27a", type:"choice", text:"Était-ce pendant un rapport sexuel ?", options:["Oui","Non"], nextMap:{ "Oui":"q27b", "Non":"q28" } },
+  { id:"q27b", type:"choice", text:"Sur qui ?", options:["Toi","Partenaire","Les deux"], next:"q28" },
+  { id:"q28", type:"yesno", text:"T’es-tu déjà masturbé alors qu’un animal était dans la piece ?", onYes:"q28a", onNo:"q29" },
+  { id:"q28a", type:"choice", text:"Quel type d'animal était présent ?", options:["chien","chat","lapin","hamster","autre"], next:"q28b" },
+  { id:"q28b", type:"choice", text:"Es-tu allé jusqu’à l’orgasme ?", options:["Oui","Non"], nextMap:{ "Oui":"q28c", "Non":"q29" } },
+  { id:"q28c", type:"choice", text:"A t'il reçu du sperme/mouille sur lui?", options:["Oui","Non"], nextMap:{ "Oui":"q28d", "Non":"q29" } },
+  { id:"q28d", type:"choice", text:"Était-ce volontaire ?", options:["Oui","Non"], next:"q29" },
+  { id:"q29", type:"yesno", text:"A tu dejà penser à avoir un rapport sexuel avec un animal ?", onYes:"q29a", onNo:"q30" },
+  { id:"q29a", type:"choice", text:"Quel type d'animal ?", options:["chien","chat","lapin","hamster","cheval","animaux de ferme","autre"], next:"q30" },
+  { id:"q30", type:"yesno", text:"As-tu déjà eu un rapport sexuel en présence d’une personne non concernée dans la pièce ?", next:"q31" },
+  { id:"q31", type:"yesno", text:"T’es-tu déjà dit : « si je retombe sur des fesses dans les 3 prochains scrolls, je vais sur Pornhub » ?", next:"q32" },
+  { id:"q32", type:"yesno", text:"T’es-tu déjà questionné sur l’orientation sexuelle ou les pratiques de personnages fictifs ?", next:"q33" },
+  { id:"q33", type:"yesno", text:"Connais-tu la règle 34 ?", onYes:"q33a", onNo:"q34" },
+  { id:"q33a", type:"choice", text:"L’as-tu déjà utilisée pour ton plaisir personnel ?", options:["Oui","Non"], next:"q34" },
+  { id:"q34", type:"yesno", text:"Consommes-tu des hentais ?", next:"q34a" },
+  { id:"q34a", type:"choice", text:"As-tu déjà consommé du contenu hentai avec des personnages clairement mineurs (loli/shota) ?", options:["Oui","Non"], nextMap:{ "Oui":"q34b", "Non":"q35" } },
+  { id:"q34b", type:"choice", text:"À quelle fréquence ?", options:["Une fois par curiosité", "Régulièrement", "C'est mon genre principal"], next:"q35" },
+  { id:"q35", type:"yesno", text:"Te masturbes-tu quotidiennement ?", onYes:"q35a", onNo:"q36" },
+  { id:"q35a", type:"choice", text:"Combien de fois par semaine ?", options:["1–2","3–4","5–6","7–8","9–10","10+"], next:"q36" },
+  { id:"q36", type:"yesno", text:"Considères-tu avoir été ou être addict à la masturbation ?", onYes:"q36a", onNo:"q37" },
+  { id:"q36a", type:"choice", text:"Nombre maximum de masturbations en une journée ?", options:["1–3","4–7","8–12","13–20","20+"], next:"q37" },
+  { id:"q37", type:"yesno", text:"As-tu déjà participé à une golden shower ?", next:"q38" },
+  { id:"q38", type:"yesno", text:"As-tu déjà pris une douche avec une personne du sexe opposé (hors famille) ?", next:"q39" },
+  { id:"q39", type:"yesno", text:"As-tu déjà utilisé un doudou pour te masturber ?", onYes:"q39a", onNo:"q40" },
+  { id:"q39a", type:"choice", text:"As-tu déjà fait un trou dans le doudou ?", options:["Oui","Non"], next:"q39b" },
+  { id:"q39b", type:"choice", text:"As-tu déjà éjaculé sur ou dans le doudou ?", options:["Oui","Non"], next:"q40" },
+  { id:"q40", type:"yesno", text:"As-tu déjà fantasmé sur un membre de ta famille proche (frère/sœur, parent, etc.) ?", onYes:"q40a", onNo:"q41" },
+  { id:"q40a", type:"choice", text:"As-tu déjà agi dessus (même un simple contact ambigu) ?", options:["Oui", "Non", "Juste un baiser de famille qui a dérapé"], next:"q41" },
+  { id:"q41", type:"yesno", text:"As-tu déjà vu un parent / beau-parent nu sans le vouloir (mais tu as regardé un peu trop longtemps) ?", next:"q42" },
+  { id:"q42", type:"yesno", text:"As-tu déjà utilisé un sous-vêtement d’un membre de ta famille pour te masturber ?", onYes:"q42a", onNo:"q43" },
+  { id:"q42a", type:"choice", text:"C’était propre ou sale ?", options:["Propre", "Sale / porté", "Très porté / odeur forte"], next:"q43" },
+  { id:"q43", type:"yesno", text:"As-tu déjà laissé un animal te lécher les parties intimes (même 'par accident') ?", next:"q46" },
+  { id:"q46", type:"yesno", text:"T’a-t-on déjà demandé de gifler / frapper au visage ton partenaire jusqu’à ce qu’il/elle pleure ?", onYes:"q46a", onNo:"q47" },
+  { id:"q46a", type:"choice", text:"As-tu accepté et l’as-tu fait ?", options:["Oui et j’ai continué", "Oui mais j’ai arrêté avant", "Non, j’ai refusé"], next:"q47" },
+  { id:"q47", type:"yesno", text:"As-tu déjà utilisé des pinces à tétons / pinces à linge sur tes parties génitales ?", next:"q48" },
+  { id:"q48", type:"yesno", text:"T’es-tu déjà masturbé·e dans un magasin (cabine d’essayage, rayon discret) ?", next:"q49" },
+  { id:"q49", type:"yesno", text:"As-tu déjà envoyé une photo / vidéo de toi en train de jouir à quelqu’un qui ne te connaît pas vraiment ?", onYes:"q49a", onNo:"q50" },
+  { id:"q49a", type:"choice", text:"C’était sur un réseau anonyme (Omegle, Discord, etc.) ?", options:["Oui", "Non"], next:"q50" },
+  { id:"q50", type:"yesno", text:"As-tu déjà fait semblant d’avoir un orgasme très fort pour humilier / faire rire quelqu’un ?", next:"q51" },
+  { id:"q51", type:"yesno", text:"As-tu déjà utilisé un légume / fruit pour te pénétrer ?", onYes:"q51a", onNo:"q51b" },
+  { id:"q51a", type:"choice", text:"Lequel ?", options:["Concombre", "Courgette", "Banane", "Carotte", "Autre truc chelou"], next:"q51b" },
+  { id:"q51b", type:"yesno", text:"As-tu déjà utilisé un objet du quotidien (téléphone, brosse à dents, manette de jeu, bouteille d’eau…) pour te masturber ou te pénétrer ?", onYes:"q51c", onNo:"q52" },
+  { id:"q51c", type:"choice", text:"Lequel était le plus inattendu ?", options:["Téléphone vibreur", "Brosse à dents électrique", "Manette / joystick", "Bouteille / canette", "Autre objet random"], next:"q52" },
+  { id:"q52", type:"yesno", text:"As-tu déjà mis ton pénis / tes testicules dans un pot de yaourt / crème glacée pour le fun ?", next:"q53" },
+  { id:"q53", type:"yesno", text:"As-tu déjà bu ton propre sperme (même une goutte) ?", onYes:"q53a", onNo:"q54" },
+  { id:"q53a", type:"choice", text:"C’était volontaire ?", options:["Oui, exprès", "Non, accident / défi perdu", "Juste goûté du bout de la langue"], next:"q54" },
+  { id:"q54", type:"yesno", text:"As-tu déjà cherché du porno avec des thèmes illégaux juste par curiosité (même sans regarder jusqu’au bout) ?", next:"q55" },
+  { id:"q55", type:"yesno", text:"As-tu déjà joui sur une image / vidéo d’une célébrité que tu détestes ?", next:"q56" },
+  { id:"q56", type:"yesno", text:"Connais-tu personnellement quelqu’un qui a fait un revenge porn (ou tu l’as fait) ?", next:"q58" },
+  { id:"q58", type:"yesno", text:"As-tu déjà eu un fantasme où tu es forcé·e / tu forces quelqu’un (même en imagination pure) ?", next:null }
 ];
 
+// ────────────────────────────────────────────────
+// Catégories + poids
+// ────────────────────────────────────────────────
+const CATEGORIES = {
+  "basique":              { name: "Expériences sexuelles classiques", weight: 1   },
+  "famille_tabou":        { name: "Famille / Inceste / Tabou",        weight: 6   },
+  "animaux":              { name: "Bestialité / Animaux",             weight: 10  },
+  "crimes_noncons":       { name: "Crimes / Non-consentement",        weight: 8   },
+  "bdsm_extreme":         { name: "BDSM / Pratiques extrêmes",        weight: 3   },
+  "public_exhibition":    { name: "Public / Exhibition / Humiliation",weight: 2   },
+  "objets_mastur":        { name: "Objets insolites / Masturbation",  weight: 2   },
+  "porno_internet":       { name: "Porno / Internet / Règle 34",      weight: 1.5 },
+  "autres":               { name: "Divers / Psychologie / Autres",    weight: 1   }
+};
 
+const CATEGORY_MAP = {
+  "q1":"basique", "q2":"public_exhibition", "q3":"objets_mastur", "q4":"basique",
+  "q5":"basique", "q6":"crimes_noncons", "q7":"crimes_noncons", "q8":"basique",
+  "q9":"famille_tabou", "q10":"crimes_noncons", "q11":"famille_tabou", "q12":"autres",
+  "q13":"autres", "q14":"basique", "q15":"public_exhibition", "q16":"public_exhibition",
+  "q17":"basique", "q18":"bdsm_extreme", "q19":"bdsm_extreme", "q20":"public_exhibition",
+  "q21":"famille_tabou", "q22":"basique", "q23":"public_exhibition", "q24":"objets_mastur",
+  "q25":"basique", "q26":"basique", "q27":"basique", "q28":"animaux", "q29":"animaux",
+  "q30":"public_exhibition", "q31":"autres", "q32":"autres", "q33":"porno_internet",
+  "q34":"porno_internet", "q35":"objets_mastur", "q36":"objets_mastur", "q37":"bdsm_extreme",
+  "q38":"basique", "q39":"objets_mastur", "q40":"famille_tabou", "q41":"famille_tabou",
+  "q42":"famille_tabou", "q43":"animaux", "q46":"bdsm_extreme", "q47":"bdsm_extreme",
+  "q48":"public_exhibition", "q49":"public_exhibition", "q50":"public_exhibition",
+  "q51":"objets_mastur", "q52":"objets_mastur", "q53":"objets_mastur", "q54":"porno_internet",
+  "q55":"porno_internet", "q56":"autres", "q58":"crimes_noncons"
+};
 
-// Score “pureté”
-function computePurity(yesCount, totalYesNo) {
-  return Math.round(((totalYesNo - yesCount) / totalYesNo) * 100);
-}
-function comment(purity){
-  if (purity >= 85) return "🕊️ Très pur";
-  if (purity >= 60) return "😇 Plutôt clean";
-  if (purity >= 35) return "😈 Zone grise";
-  return "🔥 Chaos";
-}
+// Pré-assignation des catégories aux questions yes/no
+Object.keys(CATEGORY_MAP).forEach(id => {
+  const q = QUESTIONS.find(qq => qq.id === id);
+  if (q && q.type === "yesno") {
+    q.category = CATEGORY_MAP[id];
+  }
+});
 
-// Moteur
-const map = new Map(QUESTIONS.map(q => [q.id, q]));
-const orderYesNoTotal = QUESTIONS.filter(q => q.type === "yesno").length;
+const totalYesNoQuestions = QUESTIONS.filter(q => q.type === "yesno").length;
 
 let currentId = null;
 let history = [];
 let answers = {};
 let yesCount = 0;
+let extraPenaltyPoints = 0;
 
-const $ = (id)=>document.getElementById(id);
-const screenIntro = $("screenIntro");
+const $ = id => document.getElementById(id);
+const screenIntro  = $("screenIntro");
 const screenQuiz   = $("screenQuiz");
 const screenResult = $("screenResult");
-const qText = $("qText");
-const counter = $("counter");
-const bar = $("bar");
-const yesnoBlock = $("yesnoBlock");
+const qText    = $("qText");
+const counter  = $("counter");
+const bar      = $("bar");
+const yesnoBlock  = $("yesnoBlock");
 const choiceBlock = $("choiceBlock");
 
-function show(el){
+function show(el) {
   [screenIntro, screenQuiz, screenResult].forEach(s => s.classList.add("hidden"));
   el.classList.remove("hidden");
 }
 
-function resetAll(){
+function resetAll() {
   currentId = QUESTIONS[0]?.id ?? null;
   history = [];
   answers = {};
   yesCount = 0;
+  extraPenaltyPoints = 0;
   if (currentId) render();
 }
 
-function progressYesNoDone(){
-  let done = 0;
-  for (const q of QUESTIONS){
-    if (q.type === "yesno" && answers[q.id]) done++;
-  }
-  return done;
+function progressYesNoDone() {
+  return QUESTIONS.filter(q => q.type === "yesno" && answers[q.id]).length;
 }
 
-function render(){
-  const q = map.get(currentId);
+function render() {
+  const q = QUESTIONS.find(qq => qq.id === currentId);
   if (!q) return;
 
   qText.textContent = q.text;
 
   const done = progressYesNoDone();
-  counter.textContent = `Progression : ${done} / ${orderYesNoTotal}`;
-  bar.style.width = (orderYesNoTotal ? (done / orderYesNoTotal) * 100 : 0) + "%";
+  counter.textContent = `Progression : ${done} / ${totalYesNoQuestions}`;
+  bar.style.width = totalYesNoQuestions ? (done / totalYesNoQuestions * 100) + "%" : "0%";
 
   yesnoBlock.classList.toggle("hidden", q.type !== "yesno");
   choiceBlock.classList.toggle("hidden", q.type !== "choice");
 
-  if (q.type === "choice"){
+  if (q.type === "choice") {
     choiceBlock.innerHTML = "";
     q.options.forEach(opt => {
       const b = document.createElement("button");
@@ -534,31 +274,37 @@ function render(){
   }
 }
 
-function go(nextId){
-  if (nextId === null || nextId === undefined){
-    return showResult();
-  }
+function go(nextId) {
+  if (!nextId) return showResult();
   history.push(currentId);
   currentId = nextId;
   render();
 }
 
-function answerYesNo(isYes){
-  const q = map.get(currentId);
+function answerYesNo(isYes) {
+  const q = QUESTIONS.find(qq => qq.id === currentId);
   if (!q || q.type !== "yesno") return;
 
   answers[q.id] = { type:"yesno", value: isYes ? "Oui" : "Non" };
-  if (isYes) yesCount++;
+  if (isYes) {
+    yesCount++;
+    // Pénalités yes/no très lourdes
+    if (["q6","q10","q11","q28","q29","q43"].includes(q.id)) extraPenaltyPoints += 12;
+    if (["q9","q40","q41","q42"].includes(q.id)) extraPenaltyPoints += 8;
+  }
 
   const nextId = isYes ? (q.onYes ?? q.next) : (q.onNo ?? q.next);
   go(nextId);
 }
 
-function answerChoice(value){
-  const q = map.get(currentId);
+function answerChoice(value) {
+  const q = QUESTIONS.find(qq => qq.id === currentId);
   if (!q || q.type !== "choice") return;
 
   answers[q.id] = { type:"choice", value };
+
+  // Pénalités selon le choix
+  extraPenaltyPoints += getChoicePenalty(q.id, value);
 
   if (q.nextMap && q.nextMap[value] !== undefined) {
     go(q.nextMap[value]);
@@ -567,50 +313,114 @@ function answerChoice(value){
   }
 }
 
-function back(){
-  if (history.length === 0) return;
+function getChoicePenalty(qid, val) {
+  const penalties = {
+    "10+":15, "5–10":9, "20+":20, "Régulièrement":8, "C'est mon genre principal":12,
+    "Enfant":25, "membre de la famille":18, "cheval":30, "animaux de ferme":25,
+    "Oui et j’ai continué":12, "Très porté / odeur forte":10, "Sale / porté":7,
+    "Oui, exprès":8, "Autre truc chelou":6, "Autre objet random":5
+  };
+  return penalties[val] || 3; // valeur par défaut
+}
 
-  // on revient à la question précédente
-  currentId = history.pop();
+function back() {
+  if (!history.length) return;
+  const prevId = history.pop();
+  const prevAns = answers[prevId];
 
-  // IMPORTANT : on supprime la réponse de la question qu’on va réafficher
-  // (comme ça tu peux vraiment la changer)
-  if (answers[currentId]?.type === "yesno" && answers[currentId].value === "Oui") {
-    yesCount--;
+  if (prevAns) {
+    if (prevAns.type === "yesno" && prevAns.value === "Oui") yesCount--;
+    // On ne retire pas les extra points (approximation acceptable)
+    delete answers[prevId];
   }
-  delete answers[currentId];
-
+  currentId = prevId;
   render();
 }
 
-function showResult(){
-  show(screenResult);
+function computeCategoryScores() {
+  const catStats = {};
 
-  const purity = computePurity(yesCount, orderYesNoTotal);
-  $("resultMain").textContent = `Pureté : ${purity}%`;
-  $("resultText").textContent = `${comment(purity)} • Oui = ${yesCount}/${orderYesNoTotal}`;
+  Object.keys(CATEGORIES).forEach(key => {
+    catStats[key] = { yes:0, total:0, name:CATEGORIES[key].name, weight:CATEGORIES[key].weight };
+  });
 
-  window.__resultText = `Pureté: ${purity}% (Oui ${yesCount}/${orderYesNoTotal})`;
+  QUESTIONS.forEach(q => {
+    if (q.type !== "yesno" || !q.category) return;
+    const cat = catStats[q.category];
+    cat.total++;
+    if (answers[q.id]?.value === "Oui") cat.yes++;
+  });
+
+  return Object.values(catStats).filter(c => c.total > 0);
 }
 
-// Handlers
-$("startBtn").onclick = () => { show(screenQuiz); resetAll(); };
-$("btnYes").onclick = () => answerYesNo(true);
-$("btnNo").onclick  = () => answerYesNo(false);
-$("btnBack").onclick = () => back();
-$("btnRestart").onclick = () => resetAll();
-$("btnReplay").onclick = () => { show(screenQuiz); resetAll(); };
+function computeGlobalPurity() {
+  const cats = computeCategoryScores();
+
+  let totalWeightedYes = extraPenaltyPoints;
+  let totalWeightedMax = extraPenaltyPoints;
+
+  cats.forEach(cat => {
+    const yesRatio = cat.yes / cat.total;
+    totalWeightedYes += yesRatio * cat.total * cat.weight;
+    totalWeightedMax += cat.total * cat.weight;
+  });
+
+  if (totalWeightedMax === 0) return 100;
+  const purity = Math.round(100 - (totalWeightedYes / totalWeightedMax * 100));
+  return Math.max(0, purity);
+}
+
+function getGlobalComment(p) {
+  if (p >= 90) return "🕊️ Pur comme la neige éternelle";
+  if (p >= 75) return "😇 Presque un saint";
+  if (p >= 55) return "😏 Zone grise assumée";
+  if (p >= 30) return "😈 Chaos organisé";
+  return "🔥 Bienvenue dans les abysses";
+}
+
+function showResult() {
+  show(screenResult);
+
+  const purity = computeGlobalPurity();
+  const cats = computeCategoryScores();
+
+  $("resultMain").innerHTML = `Pureté globale : <b>${purity}%</b><br><small>${getGlobalComment(purity)}</small>`;
+
+  let html = `<p>Oui aux questions principales : ${yesCount} / ${totalYesNoQuestions}<br>Points de pénalité (secondaires + graves) : ${extraPenaltyPoints}</p>`;
+  html += `<table><tr><th>Catégorie</th><th>Pureté</th><th>Oui</th></tr>`;
+
+  cats.forEach(cat => {
+    const catPurity = Math.round( (cat.total - cat.yes) / cat.total * 100 );
+    let color = catPurity >= 80 ? "#88ff88" : catPurity >= 50 ? "#ffdd88" : "#ff8888";
+    html += `<tr><td>${cat.name}</td><td style="color:${color}">${catPurity}%</td><td>${cat.yes}/${cat.total}</td></tr>`;
+  });
+
+  html += `</table>`;
+  $("resultText").innerHTML = html;
+
+  window.__resultText = `Pureté: ${purity}% - ${getGlobalComment(purity)}`;
+}
+
+// ────────────────────────────────────────────────
+// Événements
+// ────────────────────────────────────────────────
+$("startBtn").onclick   = () => { show(screenQuiz); resetAll(); };
+$("btnYes").onclick     = () => answerYesNo(true);
+$("btnNo").onclick      = () => answerYesNo(false);
+$("btnBack").onclick    = back;
+$("btnRestart").onclick = resetAll;
+$("btnReplay").onclick  = () => { show(screenQuiz); resetAll(); };
 
 $("btnCopy").onclick = async () => {
-  try{
-    await navigator.clipboard.writeText(window.__resultText || "");
-    $("btnCopy").textContent = "Copié ✅";
-    setTimeout(()=> $("btnCopy").textContent = "Copier résultat", 1000);
-  } catch(e){
-    alert("Impossible de copier.");
+  try {
+    await navigator.clipboard.writeText(window.__resultText || "Pas de résultat");
+    $("btnCopy").textContent = "Copié ✓";
+    setTimeout(() => $("btnCopy").textContent = "Copier résultat", 1500);
+  } catch(e) {
+    $("btnCopy").textContent = "Erreur...";
   }
 };
 </script>
-
 </body>
 </html>
