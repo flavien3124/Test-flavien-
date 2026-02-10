@@ -73,29 +73,46 @@
 <script>
 const QUESTIONS = [
   { id:"q1", type:"yesno", text:"As-tu déjà touché volontairement les parties intimes d'un camarade ?", next:"q2" },
+  
   { id:"q2", type:"yesno", text:"T'es-tu déjà exhibé dans un bar ?", next:"q3" },
+  
   { id:"q3", type:"yesno", text:"As-tu déjà éjaculé dans une bouteille pour ne pas bouger de ton lit ?", onYes:"q3a", onNo:"q4" },
   { id:"q3a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q4" },
+  
   { id:"q4", type:"yesno", text:"As-tu déjà embrassé une inconnue en boîte ?", onYes:"q4a", onNo:"q5" },
   { id:"q4a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q5" },
+  
   { id:"q5", type:"yesno", text:"As-tu déjà trompé ?", onYes:"q5a", onNo:"q6" },
   { id:"q5a", type:"choice", text:"Combien de fois ?", options:["1","2","3","4","5–10","10+"], next:"q6" },
+  
   { id:"q6", type:"yesno", text:"As-tu déjà été accusé de viol ?", next:"q7" },
+  
   { id:"q7", type:"yesno", text:"As-tu déjà touché à une drogue ?", onYes:"q7a", onNo:"q8" },
   { id:"q7a", type:"choice", text:"Combien de drogues différentes ?", options:["1","2","3","4","5–10","10+"], next:"q8" },
+  
   { id:"q8", type:"yesno", text:"As-tu déjà eu des rapports homosexuels ?", next:"q9" },
+  
   { id:"q9", type:"yesno", text:"As-tu déjà eu des relations avec ton cousin / ta cousine ?", onYes:"q9a", onNo:"q10" },
   { id:"q9a", type:"choice", text:"Avec les deux ?", options:["Oui","Non"], next:"q10" },
+  
   { id:"q10", type:"yesno", text:"T'es-tu déjà fait violer ?", next:"q11" },
+  
   { id:"q11", type:"yesno", text:"As-tu déjà uriné sur ta mère ?", next:"q12" },
+  
   { id:"q12", type:"yesno", text:"T'es-tu déjà fait frapper par ton père ?", onYes:"q12a", onNo:"q13" },
   { id:"q12a", type:"choice", text:"Les gendarmes ont-ils dû intervenir ?", options:["Oui","Non"], next:"q13" },
+  
   { id:"q13", type:"yesno", text:"Ton psy t'a déjà dit une phrase du genre : « vous savez, il y a des gens qui ont de vrais problèmes dans la vie » ?", next:"q14" },
+  
   { id:"q14", type:"yesno", text:"As-tu déjà fait ou reçu une fellation avec une personne du même sexe ?", onYes:"q14a", onNo:"q15" },
   { id:"q14a", type:"choice", text:"À quel âge la première fois ?", options:["18–20","21–25","26–30","31–40","40+"], next:"q15" },
+  
   { id:"q15", type:"yesno", text:"As-tu déjà eu un rapport dans un parc pour enfants ?", next:"q16" },
+  
   { id:"q16", type:"yesno", text:"As-tu déjà eu un rapport dans une grande roue ?", next:"q17" },
+  
   { id:"q17", type:"yesno", text:"As-tu déjà pratiqué l’anal ?", next:"q18" },
+  
   { id:"q18", type:"yesno", text:"As-tu déjà pratiqué le BDSM ?", onYes:"q18a", onNo:"q19" },
   { id:"q18a", type:"choice", text:"Qui était attaché ?", options:["Toi","Partenaire","Les deux","Personne"], next:"q18b" },
   { id:"q18b", type:"choice", text:"Qui a été frappé ?", options:["Toi","Partenaire","Les deux","Personne"], nextMap:{ "Personne":"q18d", "Toi":"q18c", "Partenaire":"q18c", "Les deux":"q18c" } },
@@ -103,106 +120,384 @@ const QUESTIONS = [
   { id:"q18d", type:"choice", text:"Qui avait les yeux bandés ?", options:["Toi","Partenaire","Les deux","Personne"], next:"q18e" },
   { id:"q18e", type:"choice", text:"Utilisation d’un fouet ?", options:["oui","non"], next:"q18f" },
   { id:"q18f", type:"choice", text:"Giflé pendant un rapport ?", options:["Toi","Partenaire","Les deux","Personne"], next:"q19" },
+  
   { id:"q19", type:"yesno", text:"As-tu déjà fait ou reçu des griffures pendant un ébat ?", onYes:"q19a", onNo:"q20" },
   { id:"q19a", type:"choice", text:"Qui a fait les griffures ?", options:["Toi","Partenaire","Les deux"], next:"q20" },
+  
   { id:"q20", type:"yesno", text:"T’es-tu déjà masturbé alors qu’une autre personne non concerné était présent dans la pièce ?", onYes:"q20a", onNo:"q21" },
   { id:"q20a", type:"choice", text:"Quel type de tiers était présent ?", options:["Personne adulte","Enfant","membre de la famille"], next:"q20b" },
   { id:"q20b", type:"choice", text:"Es-tu allé jusqu’à l’orgasme ?", options:["Oui","Non"], nextMap:{ "Oui":"q20c", "Non":"q21" } },
   { id:"q20c", type:"choice", text:"A t'il reçu du sperme/mouille sur lui?", options:["Oui","Non"], nextMap:{ "Oui":"q20d", "Non":"q21" } },
   { id:"q20d", type:"choice", text:"Était-ce volontaire ?", options:["Oui","Non"], next:"q21" },
-  { id:"q21", type:"yesno", text:"Un membre de ta famille a-t-il déjà dû gérer les conséquences d’un acte intime te concernant ?", next:"q22" },
+  
+  { id:"q21", type:"yesno", text:"Un membre de ta famille a-t-il déjà dû gérer les conséquences d’un acte intime te concernant ?", next:"q22"},
+  
   { id:"q22", type:"yesno", text:"As-tu déjà appris à quelqu’un comment se masturber ?", onYes:"q22a", onNo:"q23" },
   { id:"q22a", type:"choice", text:"À combien de personnes ?", options:["1","2","3","4","5–10","10+"], next:"q22b" },
   { id:"q22b", type:"choice", text:"As-tu déjà appris cela à ton meilleur ami ?", options:["Oui","Non"], next:"q23" },
+  
   { id:"q23", type:"yesno", text:"As-tu déjà répondu à un appel téléphonique en plein ébat ?", next:"q24" },
+  
   { id:"q24", type:"yesno", text:"As-tu déjà uriné dans le capot d’une voiture ?", next:"q25" },
+  
   { id:"q25", type:"yesno", text:"As-tu déjà fait perdre la virginité à quelqu’un ?", onYes:"q25a", onNo:"q26" },
   { id:"q25a", type:"choice", text:"À combien de personnes ?", options:["1","2","3","4","5–10","10+"], next:"q26" },
+  
   { id:"q26", type:"yesno", text:"As-tu déjà pratiqué le “chocopouce” (doigt inséré dans l’anus) ?", onYes:"q26a", onNo:"q27" },
   { id:"q26a", type:"choice", text:"Qui l’a reçu ?", options:["Toi","Partenaire","Les deux"], next:"q27" },
+  
   { id:"q27", type:"yesno", text:"As-tu déjà utilisé un sextoy ?", onYes:"q27a", onNo:"q28" },
   { id:"q27a", type:"choice", text:"Était-ce pendant un rapport sexuel ?", options:["Oui","Non"], nextMap:{ "Oui":"q27b", "Non":"q28" } },
   { id:"q27b", type:"choice", text:"Sur qui ?", options:["Toi","Partenaire","Les deux"], next:"q28" },
+  
   { id:"q28", type:"yesno", text:"T’es-tu déjà masturbé alors qu’un animal était dans la piece ?", onYes:"q28a", onNo:"q29" },
   { id:"q28a", type:"choice", text:"Quel type d'animal était présent ?", options:["chien","chat","lapin","hamster","autre"], next:"q28b" },
   { id:"q28b", type:"choice", text:"Es-tu allé jusqu’à l’orgasme ?", options:["Oui","Non"], nextMap:{ "Oui":"q28c", "Non":"q29" } },
   { id:"q28c", type:"choice", text:"A t'il reçu du sperme/mouille sur lui?", options:["Oui","Non"], nextMap:{ "Oui":"q28d", "Non":"q29" } },
   { id:"q28d", type:"choice", text:"Était-ce volontaire ?", options:["Oui","Non"], next:"q29" },
+  
   { id:"q29", type:"yesno", text:"A tu dejà penser à avoir un rapport sexuel avec un animal ?", onYes:"q29a", onNo:"q30" },
   { id:"q29a", type:"choice", text:"Quel type d'animal ?", options:["chien","chat","lapin","hamster","cheval","animaux de ferme","autre"], next:"q30" },
+  
   { id:"q30", type:"yesno", text:"As-tu déjà eu un rapport sexuel en présence d’une personne non concernée dans la pièce ?", next:"q31" },
+  
   { id:"q31", type:"yesno", text:"T’es-tu déjà dit : « si je retombe sur des fesses dans les 3 prochains scrolls, je vais sur Pornhub » ?", next:"q32" },
+  
   { id:"q32", type:"yesno", text:"T’es-tu déjà questionné sur l’orientation sexuelle ou les pratiques de personnages fictifs ?", next:"q33" },
+  
   { id:"q33", type:"yesno", text:"Connais-tu la règle 34 ?", onYes:"q33a", onNo:"q34" },
   { id:"q33a", type:"choice", text:"L’as-tu déjà utilisée pour ton plaisir personnel ?", options:["Oui","Non"], next:"q34" },
+  
   { id:"q34", type:"yesno", text:"Consommes-tu des hentais ?", next:"q34a" },
   { id:"q34a", type:"choice", text:"As-tu déjà consommé du contenu hentai avec des personnages clairement mineurs (loli/shota) ?", options:["Oui","Non"], nextMap:{ "Oui":"q34b", "Non":"q35" } },
   { id:"q34b", type:"choice", text:"À quelle fréquence ?", options:["Une fois par curiosité", "Régulièrement", "C'est mon genre principal"], next:"q35" },
+  
   { id:"q35", type:"yesno", text:"Te masturbes-tu quotidiennement ?", onYes:"q35a", onNo:"q36" },
   { id:"q35a", type:"choice", text:"Combien de fois par semaine ?", options:["1–2","3–4","5–6","7–8","9–10","10+"], next:"q36" },
+  
   { id:"q36", type:"yesno", text:"Considères-tu avoir été ou être addict à la masturbation ?", onYes:"q36a", onNo:"q37" },
   { id:"q36a", type:"choice", text:"Nombre maximum de masturbations en une journée ?", options:["1–3","4–7","8–12","13–20","20+"], next:"q37" },
+  
   { id:"q37", type:"yesno", text:"As-tu déjà participé à une golden shower ?", next:"q38" },
+  
   { id:"q38", type:"yesno", text:"As-tu déjà pris une douche avec une personne du sexe opposé (hors famille) ?", next:"q39" },
+  
   { id:"q39", type:"yesno", text:"As-tu déjà utilisé un doudou pour te masturber ?", onYes:"q39a", onNo:"q40" },
   { id:"q39a", type:"choice", text:"As-tu déjà fait un trou dans le doudou ?", options:["Oui","Non"], next:"q39b" },
   { id:"q39b", type:"choice", text:"As-tu déjà éjaculé sur ou dans le doudou ?", options:["Oui","Non"], next:"q40" },
+  
   { id:"q40", type:"yesno", text:"As-tu déjà fantasmé sur un membre de ta famille proche (frère/sœur, parent, etc.) ?", onYes:"q40a", onNo:"q41" },
   { id:"q40a", type:"choice", text:"As-tu déjà agi dessus (même un simple contact ambigu) ?", options:["Oui", "Non", "Juste un baiser de famille qui a dérapé"], next:"q41" },
+  
   { id:"q41", type:"yesno", text:"As-tu déjà vu un parent / beau-parent nu sans le vouloir (mais tu as regardé un peu trop longtemps) ?", next:"q42" },
+  
   { id:"q42", type:"yesno", text:"As-tu déjà utilisé un sous-vêtement d’un membre de ta famille pour te masturber ?", onYes:"q42a", onNo:"q43" },
   { id:"q42a", type:"choice", text:"C’était propre ou sale ?", options:["Propre", "Sale / porté", "Très porté / odeur forte"], next:"q43" },
+  
   { id:"q43", type:"yesno", text:"As-tu déjà laissé un animal te lécher les parties intimes (même 'par accident') ?", next:"q46" },
+  
+  
+  
+  
+  
+  
+  
+  
   { id:"q46", type:"yesno", text:"T’a-t-on déjà demandé de gifler / frapper au visage ton partenaire jusqu’à ce qu’il/elle pleure ?", onYes:"q46a", onNo:"q47" },
+  
   { id:"q46a", type:"choice", text:"As-tu accepté et l’as-tu fait ?", options:["Oui et j’ai continué", "Oui mais j’ai arrêté avant", "Non, j’ai refusé"], next:"q47" },
+  
   { id:"q47", type:"yesno", text:"As-tu déjà utilisé des pinces à tétons / pinces à linge sur tes parties génitales ?", next:"q48" },
+  
   { id:"q48", type:"yesno", text:"T’es-tu déjà masturbé·e dans un magasin (cabine d’essayage, rayon discret) ?", next:"q49" },
+  
   { id:"q49", type:"yesno", text:"As-tu déjà envoyé une photo / vidéo de toi en train de jouir à quelqu’un qui ne te connaît pas vraiment ?", onYes:"q49a", onNo:"q50" },
+  
   { id:"q49a", type:"choice", text:"C’était sur un réseau anonyme (Omegle, Discord, etc.) ?", options:["Oui", "Non"], next:"q50" },
+  
   { id:"q50", type:"yesno", text:"As-tu déjà fait semblant d’avoir un orgasme très fort pour humilier / faire rire quelqu’un ?", next:"q51" },
+  
   { id:"q51", type:"yesno", text:"As-tu déjà utilisé un légume / fruit pour te pénétrer ?", onYes:"q51a", onNo:"q51b" },
   { id:"q51a", type:"choice", text:"Lequel ?", options:["Concombre", "Courgette", "Banane", "Carotte", "Autre truc chelou"], next:"q51b" },
   { id:"q51b", type:"yesno", text:"As-tu déjà utilisé un objet du quotidien (téléphone, brosse à dents, manette de jeu, bouteille d’eau…) pour te masturber ou te pénétrer ?", onYes:"q51c", onNo:"q52" },
   { id:"q51c", type:"choice", text:"Lequel était le plus inattendu ?", options:["Téléphone vibreur", "Brosse à dents électrique", "Manette / joystick", "Bouteille / canette", "Autre objet random"], next:"q52" },
+  
   { id:"q52", type:"yesno", text:"As-tu déjà mis ton pénis / tes testicules dans un pot de yaourt / crème glacée pour le fun ?", next:"q53" },
+  
   { id:"q53", type:"yesno", text:"As-tu déjà bu ton propre sperme (même une goutte) ?", onYes:"q53a", onNo:"q54" },
   { id:"q53a", type:"choice", text:"C’était volontaire ?", options:["Oui, exprès", "Non, accident / défi perdu", "Juste goûté du bout de la langue"], next:"q54" },
+  
   { id:"q54", type:"yesno", text:"As-tu déjà cherché du porno avec des thèmes illégaux juste par curiosité (même sans regarder jusqu’au bout) ?", next:"q55" },
+  
   { id:"q55", type:"yesno", text:"As-tu déjà joui sur une image / vidéo d’une célébrité que tu détestes ?", next:"q56" },
-  { id:"q56", type:"yesno", text:"Connais-tu personnellement quelqu’un qui a fait un revenge porn (ou tu l’as fait) ?", next:"q58" },
-  { id:"q58", type:"yesno", text:"As-tu déjà eu un fantasme où tu es forcé·e / tu forces quelqu’un (même en imagination pure) ?", next:null }
+  
+  { id:"q56", type:"yesno", text:"Connais-tu personnellement quelqu’un qui a fait un revenge porn (ou tu l’as fait) ?", next:"q57" },
+  
+    { id:"q57", type:"yesno", 
+    text:"As-tu déjà eu un fantasme où tu es forcé·e / tu forces quelqu’un (même en imagination pure) ?", 
+    next:"q58" 
+  },
+
+  { id:"q58", type:"yesno", 
+    text:"As-tu déjà bu seul chez toi entre 2 h et 5 h du matin ?", 
+    next:"q59" 
+  },
+
+  { id:"q59", type:"yesno", 
+    text:"T’es-tu déjà réveillé sans aucun souvenir de la veille, mais avec des preuves photo/vidéo sur ton téléphone ?", 
+    next:"q60" 
+  },
+
+  { id:"q60", type:"yesno", 
+    text:"As-tu déjà bu plus de 10 verres en une soirée au moins 5 fois dans ta vie ?", 
+    next:"q61" 
+  },
+
+  { id:"q61", type:"yesno", 
+    text:"As-tu déjà fait un before (pré-soirée) seul avant de sortir ?", 
+    next:"q62" 
+  },
+
+  { id:"q62", type:"yesno", 
+    text:"Considères-tu que 4 pintes c’est « juste pour commencer la soirée » ?", 
+    next:"q63" 
+  },
+
+  { id:"q63", type:"yesno", 
+    text:"As-tu déjà vomi à cause de l'alcool ?", 
+    onYes:"q63a", onNo:"q64" 
+  },
+
+  { id:"q63a", type:"yesno",   // ← changé en yesno pour fluidité, puis branchement choice si besoin
+    text:"As-tu déjà vomi dans un lieu public (rue, bar, métro, parc...) ?", 
+    next:"q63b" 
+  },
+
+  { id:"q63b", type:"choice", 
+    text:"As-tu déjà vomi **sur quelqu’un** d’autre (ami, inconnu, partenaire) ?", 
+    options:["Oui, volontairement", "Oui, par accident", "Non, jamais sur quelqu’un"], 
+    next:"q64" 
+  },
+
+  { id:"q64", type:"yesno", 
+    text:"T’es-tu déjà disputé violemment avec quelqu’un alors que vous étiez tous les deux bourrés ?", 
+    next:"q65" 
+  },
+
+  { id:"q65", type:"yesno", 
+    text:"As-tu déjà pleuré en public à cause de l’alcool (crise de larmes en soirée, confession alcoolisée…)", 
+    next:"q66" 
+  },
+
+  { id:"q66", type:"yesno", 
+    text:"As-tu déjà dragué / embrassé quelqu’un que tu trouvais vraiment moche une fois dégrisé ?", 
+    next:"q67" 
+  },
+
+  { id:"q67", type:"yesno", 
+    text:"As-tu déjà envoyé un message très gênant / très lourd à ton ex / crush / patron pendant une cuite ?", 
+    next:"q68" 
+  },
+
+  { id:"q68", type:"yesno", 
+    text:"As-tu déjà conduit (voiture, scooter, vélo…) après avoir clairement trop bu ?", 
+    next:"q69" 
+  },
+
+  { id:"q69", type:"yesno", 
+    text:"As-tu déjà bu au point de tomber dans les pommes / black-out total ?", 
+    next:"q70" 
+  },
+
+  { id:"q70", type:"yesno", 
+    text:"T’es-tu déjà réveillé chez une personne inconnue sans savoir comment tu y es arrivé ?", 
+    next:"q71" 
+  },
+
+  { id:"q71", type:"yesno", 
+    text:"As-tu déjà mélangé alcool + médicaments / drogues dures au point d’avoir vraiment eu peur pour ta santé ?", 
+    next:"q72" 
+  },
+
+  { id:"q72", type:"yesno", 
+    text:"As-tu déjà bu directement à la bouteille en mode « je m’en fous » devant des gens qui te jugeaient ?", 
+    next:"q73" 
+  },
+
+  { id:"q73", type:"yesno", 
+    text:"As-tu déjà bu de l’alcool dans un cimetière, une église ou un lieu de recueillement ?", 
+    next:"q74" 
+  },
+
+  { id:"q74", type:"yesno", 
+    text:"T’es-tu déjà saoulé dans les transports en commun (train, avion, bus longue distance…)", 
+    next:"q75" 
+  },
+
+  { id:"q75", type:"yesno", 
+    text:"As-tu déjà bu de l’alcool fort au petit-déjeuner (ou au moins essayé) ?", 
+    next:"q76" 
+  },
+
+  { id:"q76", type:"yesno", 
+    text:"L’alcool te donne-t-il souvent envie de baiser (plus que d’habitude) ?", 
+    onYes:"q76a", onNo:"q77" 
+  },
+  { id:"q76a", type:"choice", 
+    text:"À quel point ?", 
+    options:["Un peu plus que d’habitude", "Beaucoup plus", "Je deviens obsédé·e", "Je fais vraiment n’importe quoi une fois bourré·e"], 
+    next:"q77" 
+  },
+
+  { id:"q77", type:"yesno", 
+    text:"L’alcool t’a-t-il déjà fait pécho / embrasser / draguer une personne qui te déplaît complètement une fois dégrisé·e ?", 
+    onYes:"q77a", onNo:"q78" 
+  },
+  { id:"q77a", type:"choice", 
+    text:"Si oui, jusqu’où c’est allé ?", 
+    options:["Juste une galoche / un bisou", "Préliminaires / pelotage lourd", "Sexe complet / pénétration", "J’ai regretté au réveil mais j’ai continué quand même"], 
+    next:"q78" 
+  },
+
+  { id:"q78", type:"yesno", 
+    text:"As-tu déjà eu un plan cul complètement improvisé et anonyme sous l’effet de l’alcool ?", 
+    next:"q79" 
+  },
+
+  { id:"q79", type:"yesno", 
+    text:"T’es-tu déjà retrouvé·e à chanter / danser comme un·e fou·folle sur du mauvais son en public à cause de l’alcool ?", 
+    next:"q80" 
+  },
+
+  { id:"q80", type:"yesno", 
+    text:"As-tu déjà perdu un objet précieux (téléphone, portefeuille, clé) pendant une cuite ?", 
+    next:"q81" 
+  },
+
+  { id:"q81", type:"yesno", 
+    text:"As-tu déjà pissé sur toi ou sur quelqu’un d’autre pendant une cuite ?", 
+    next:"q82" 
+  },
+
+  { id:"q82", type:"yesno", 
+    text:"T’es-tu déjà masturbé bourré en mode « je regrette tout » ?", 
+    next:"q83" 
+  },
+
+  { id:"q83", type:"yesno", 
+    text:"As-tu déjà essayé d’arrêter l’alcool pendant plus d’un mois et échoué ?", 
+    next:null 
+  },
 ];
 
 // ────────────────────────────────────────────────
 // Catégories + poids
 // ────────────────────────────────────────────────
 const CATEGORIES = {
-  "basique":              { name: "Expériences sexuelles classiques", weight: 1   },
+  "basique":{ name: "Expériences sexuelles classiques", weight: 1   },
+  
   "famille_tabou":        { name: "Famille / Inceste / Tabou",        weight: 6   },
+  
   "animaux":              { name: "Bestialité / Animaux",             weight: 10  },
+  
   "crimes_noncons":       { name: "Crimes / Non-consentement",        weight: 8   },
+
   "bdsm_extreme":         { name: "BDSM / Pratiques extrêmes",        weight: 3   },
+ 
   "public_exhibition":    { name: "Public / Exhibition / Humiliation",weight: 2   },
+ 
   "objets_mastur":        { name: "Objets insolites / Masturbation",  weight: 2   },
+  
   "porno_internet":       { name: "Porno / Internet / Règle 34",      weight: 1.5 },
-  "autres":               { name: "Divers / Psychologie / Autres",    weight: 1   }
+ 
+  "autres":               { name: "Divers / Psychologie / Autres",    weight: 1   },
+  
+  "alcool": { name: "Alcool / Cuites / Dépendance", weight: 2.5 }
 };
 
 const CATEGORY_MAP = {
-  "q1":"basique", "q2":"public_exhibition", "q3":"objets_mastur", "q4":"basique",
-  "q5":"basique", "q6":"crimes_noncons", "q7":"crimes_noncons", "q8":"basique",
-  "q9":"famille_tabou", "q10":"crimes_noncons", "q11":"famille_tabou", "q12":"autres",
-  "q13":"autres", "q14":"basique", "q15":"public_exhibition", "q16":"public_exhibition",
-  "q17":"basique", "q18":"bdsm_extreme", "q19":"bdsm_extreme", "q20":"public_exhibition",
-  "q21":"famille_tabou", "q22":"basique", "q23":"public_exhibition", "q24":"objets_mastur",
-  "q25":"basique", "q26":"basique", "q27":"basique", "q28":"animaux", "q29":"animaux",
-  "q30":"public_exhibition", "q31":"autres", "q32":"autres", "q33":"porno_internet",
-  "q34":"porno_internet", "q35":"objets_mastur", "q36":"objets_mastur", "q37":"bdsm_extreme",
-  "q38":"basique", "q39":"objets_mastur", "q40":"famille_tabou", "q41":"famille_tabou",
-  "q42":"famille_tabou", "q43":"animaux", "q46":"bdsm_extreme", "q47":"bdsm_extreme",
-  "q48":"public_exhibition", "q49":"public_exhibition", "q50":"public_exhibition",
-  "q51":"objets_mastur", "q52":"objets_mastur", "q53":"objets_mastur", "q54":"porno_internet",
-  "q55":"porno_internet", "q56":"autres", "q58":"crimes_noncons"
+  "q1":"basique", 
+  "q2":"public_exhibition", 
+  "q3":"objets_mastur", 
+  "q4":"basique",
+  "q5":"basique", 
+  "q6":"crimes_noncons", 
+  "q7":"crimes_noncons", 
+  "q8":"basique",
+  "q9":"famille_tabou", 
+  "q10":"crimes_noncons", 
+  "q11":"famille_tabou", 
+  "q12":"autres",
+  "q13":"autres", 
+  "q14":"basique", 
+  "q15":"public_exhibition", 
+  "q16":"public_exhibition",
+  "q17":"basique", 
+  "q18":"bdsm_extreme", 
+  "q19":"bdsm_extreme", 
+  "q20":"public_exhibition",
+  "q21":"famille_tabou", 
+  "q22":"basique", 
+  "q23":"public_exhibition", 
+  "q24":"objets_mastur",
+  "q25":"basique", 
+  "q26":"basique", 
+  "q27":"basique", 
+  "q28":"animaux", 
+  "q29":"animaux",
+  "q30":"public_exhibition", 
+  "q31":"autres", 
+  "q32":"autres", 
+  "q33":"porno_internet",
+  "q34":"porno_internet", 
+  "q35":"objets_mastur", 
+  "q36":"objets_mastur", 
+  "q37":"bdsm_extreme",
+  "q38":"basique", 
+  "q39":"objets_mastur", 
+  "q40":"famille_tabou", 
+  "q41":"famille_tabou",
+  "q42":"famille_tabou", 
+  "q43":"animaux", 
+  "q46":"bdsm_extreme", 
+  "q47":"bdsm_extreme",
+  "q48":"public_exhibition", 
+  "q49":"public_exhibition", 
+  "q50":"public_exhibition",
+  "q51":"objets_mastur", 
+  "q52":"objets_mastur", 
+  "q53":"objets_mastur", 
+  "q54":"porno_internet",
+  "q55":"porno_internet", 
+  "q56":"autres", 
+  "q57":"crimes_noncons",
+  "q58":"alcool", 
+  "q59":"alcool", 
+  "q60":"alcool", 
+  "q61":"alcool", 
+  "q62":"alcool",
+  "q63":"alcool", 
+  "q64":"alcool", 
+  "q65":"alcool", 
+  "q66":"alcool", 
+  "q67":"alcool",
+  "q68":"alcool", 
+  "q69":"alcool", 
+  "q70":"alcool",
+  "q71":"alcool",
+  "q72":"alcool",
+  "q73":"alcool",
+  "q74":"alcool",
+  "q75":"alcool", 
+  "q76":"alcool", 
+  "q77":"alcool",
+  "q78":"alcool", 
+  "q79":"alcool",
+  "q80":"alcool",
+  "q81":"alcool",
+  "q82":"alcool",
+  "q83":"alcool"
+  
 };
 
 // Pré-assignation des catégories aux questions yes/no
@@ -318,7 +613,14 @@ function getChoicePenalty(qid, val) {
     "10+":15, "5–10":9, "20+":20, "Régulièrement":8, "C'est mon genre principal":12,
     "Enfant":25, "membre de la famille":18, "cheval":30, "animaux de ferme":25,
     "Oui et j’ai continué":12, "Très porté / odeur forte":10, "Sale / porté":7,
-    "Oui, exprès":8, "Autre truc chelou":6, "Autre objet random":5
+    "Oui, exprès":8, "Autre truc chelou":6, "Autre objet random":5,
+        
+    "Sexe complet / pénétration": 10,
+    "Je fais vraiment n’importe quoi une fois bourré·e": 9,
+    "Je deviens obsédé·e": 7,
+    "Oui, volontairement": 8,
+    "Oui, par accident": 4
+    
   };
   return penalties[val] || 3; // valeur par défaut
 }
