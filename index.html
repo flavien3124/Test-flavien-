@@ -298,7 +298,84 @@ const QUESTIONS = [
   { id:"q106", type:"yesno", text:"As-tu déjà mis dans la bouche un doigt qui était dans l'anus de ton partenaire ?", next:"q107", weight: 4 },
   { id:"q107", type:"yesno", text:"As-tu déjà vu un membre de ta famille violer/agresser sexuellement quelqu’un ?", onYes:"q107a", onNo:"q108", weight: 15 },
   { id:"q107a", type:"choice", text:"L’autre personne était-elle aussi de ta famille ?", options:["Oui","Non"], next:"q108" },
-  { id:"q108", type:"yesno", text:"As-tu déjà pratiqué ou reçu une faciale ?", next:null, weight: 2 }
+  { id:"q108", type:"yesno", text:"As-tu déjà pratiqué ou reçu une faciale ?", next:null, weight: 2 },
+  
+// DROGUE - q109 à q127
+  { id:"q109", type:"yesno", text:"As-tu déjà acheté de la drogue (herbe, coke, MD, ecstasy, kétamine, héro, etc.) ?", next:null, category:"drogue", weight:8 },
+  { id:"q110", type:"yesno", text:"As-tu déjà vendu ou dealé de la drogue (même une seule fois ou à un seul pote) ?", next:null, category:"drogue", weight:12 },
+  { id:"q111", type:"yesno", text:"As-tu déjà transporté de la drogue pour quelqu’un (go-fast, mule, poche dans le cul, etc.) ?", next:null, category:"drogue", weight:10 },
+  { id:"q112", type:"yesno", text:"As-tu déjà volé de l’argent, un téléphone, un bijou ou autre chose pour te payer ta came ?", next:null, category:"drogue", weight:9 },
+  { id:"q113", type:"yesno", text:"As-tu déjà sniffé / fumé / shooté pendant plus de 3 jours sans dormir ni manger correctement ?", next:null, category:"drogue", weight:10 },
+  { id:"q114", type:"yesno", text:"As-tu déjà fait une bad trip tellement violent que tu as cru mourir ou devenir fou ?", next:null, category:"drogue", weight:8 },
+  { id:"q115", type:"yesno", text:"As-tu déjà mélangé plusieurs drogues dures en même temps (ex: coke + MD + alcool + GHB) ?", next:null, category:"drogue", weight:9 },
+  { id:"q116", type:"yesno", text:"As-tu déjà eu une overdose ou été à deux doigts d’en faire une ?", next:null, category:"drogue", weight:12 },
+  { id:"q117", type:"yesno", text:"As-tu déjà consommé de la drogue dans un lieu très risqué (toilette de lycée, voiture de parents, boulot) ?", next:null, category:"drogue", weight:7 },
+  { id:"q118", type:"yesno", text:"As-tu déjà eu des trous noirs / black-out complets à cause de la drogue ?", next:null, category:"drogue", weight:8 },
+  { id:"q119", type:"yesno", text:"As-tu déjà perdu un job, des études, une relation ou de l’argent à cause de ta conso ?", next:null, category:"drogue", weight:9 },
+  { id:"q120", type:"yesno", text:"As-tu déjà menti à tes proches pendant des mois sur ta consommation ?", next:null, category:"drogue", weight:7 },
+  { id:"q121", type:"yesno", text:"As-tu déjà sniffé sur le corps / les fesses / les seins / le sexe de quelqu’un ?", next:null, category:"drogue", weight:8 },
+  { id:"q122", type:"yesno", text:"As-tu déjà eu des hallucinations (voir des ombres, entendre des voix) à cause de la drogue ?", next:null, category:"drogue", weight:10 },
+  { id:"q123", type:"yesno", text:"As-tu déjà essayé de te désintox tout seul·e et rechuté dans les 48 h ?", next:null, category:"drogue", weight:8 },
+  { id:"q124", type:"yesno", text:"As-tu déjà fumé du tabac ?", onYes:"q124a", category:"drogue", weight:3 },
+  { id:"q124a", type:"choice", text:"Combien de clopes par jour en moyenne ?", options:["0–5","6–10","11–20","20+","Vapote seulement","J’ai arrêté"], next:"q125", category:"drogue" },
+  { id:"q125", type:"choice", text:"Ah tu déjeunes sur une puff ? (tu commences la journée avec une puff ?)", options:["Oui tous les matins","Parfois","Jamais","J’ai arrêté"], next:"q126", category:"drogue", weight:4 },
+  { id:"q126", type:"yesno", text:"As-tu déjà fumé pendant le sexe ?", next:"q127", category:"drogue", weight:3 },
+  { id:"q127", type:"yesno", text:"As-tu déjà fumé juste après le sexe ?", next:null, category:"drogue", weight:3 },
+
+  // HOMOSEXUALITÉ - q128 à q139
+  { id:"q128", type:"yesno", text:"As-tu déjà reçu une pipe ou une main d’un mec ?", next:null, category:"homosexuel", weight:6 },
+  { id:"q129", type:"yesno", text:"As-tu déjà eu un rapport anal (actif ou passif) avec un homme ?", next:null, category:"homosexuel", weight:7 },
+  { id:"q130", type:"yesno", text:"As-tu déjà été dans un sauna gay, backroom, darkroom ou glory hole ?", next:null, category:"homosexuel", weight:8 },
+  { id:"q131", type:"yesno", text:"As-tu déjà eu un plan cul gay via Grindr / Scruff / Tinder / plan cul spontané ?", next:null, category:"homosexuel", weight:6 },
+  { id:"q132", type:"yesno", text:"As-tu déjà eu plusieurs mecs dans la même soirée / journée (cruising, gangbang gay) ?", next:null, category:"homosexuel", weight:9 },
+  { id:"q133", type:"yesno", text:"As-tu déjà fantasmé sur un pote hétéro en te branlant ?", next:null, category:"homosexuel", weight:5 },
+  { id:"q134", type:"yesno", text:"As-tu déjà eu une relation suivie (plus de 3 mois) avec un mec ?", next:null, category:"homosexuel", weight:7 },
+  { id:"q135", type:"yesno", text:"As-tu déjà regardé du porno gay en te masturbant alors que tu te dis hétéro ?", next:null, category:"homosexuel", weight:4 },
+  { id:"q136", type:"yesno", text:"As-tu déjà eu une érection en voyant un mec nu ou en pensant à un mec ?", next:null, category:"homosexuel", weight:4 },
+  { id:"q137", type:"yesno", text:"As-tu déjà embrassé un mec ?", onYes:"q137a", category:"homosexuel", weight:5 },
+  { id:"q137a", type:"choice", text:"Combien de fois environ ?", options:["1–2","3–5","6–10","11–20","20+"], next:"q138", category:"homosexuel" },
+  { id:"q138", type:"yesno", text:"As-t-on déjà pensé que tu étais gay ? (ou lesbienne si femme)", next:null, category:"homosexuel", weight:3 },
+
+  // DÉGUEULASSE - q139 à q152
+  { id:"q139", type:"yesno", text:"As-tu déjà fait un anulingus (rimjob / léché le trou du cul) ?", onYes:"q139a", category:"hygiene", weight:7 },
+  { id:"q139a", type:"choice", text:"À combien de personnes différentes ?", options:["1","2–3","4–5","6+"], next:null, category:"hygiene" },
+  { id:"q140", type:"yesno", text:"As-tu déjà eu un rapport avec quelqu’un qui sentait très mauvais (au point d’avoir envie de vomir) ?", next:null, category:"hygiene", weight:6 },
+  { id:"q141", type:"yesno", text:"As-tu déjà mangé du sperme frais (le tien ou celui d’un autre) ?", next:null, category:"hygiene", weight:5 },
+  { id:"q142", type:"yesno", text:"As-tu déjà fait un cunnilingus pendant les règles (sang sur la langue) ?", next:null, category:"hygiene", weight:6 },
+  { id:"q143", type:"yesno", text:"As-tu déjà mis un doigt dans un cul puis dans ta bouche ou celle de quelqu’un ?", next:null, category:"hygiene", weight:7 },
+  { id:"q144", type:"yesno", text:"As-tu déjà utilisé un légume / objet sale / non lavé pour te pénétrer ?", next:null, category:"hygiene", weight:5 },
+  { id:"q145", type:"yesno", text:"As-tu déjà eu un rapport dans des chiottes publiques ultra-dégueulasses ?", next:null, category:"hygiene", weight:4 },
+  { id:"q146", type:"yesno", text:"As-tu déjà vomi pendant ou juste après un rapport sexuel ?", next:null, category:"hygiene", weight:5 },
+  { id:"q147", type:"yesno", text:"As-tu déjà léché / mordu des pieds ?", next:null, category:"hygiene", weight:4 },
+  { id:"q148", type:"yesno", text:"As-tu déjà léché une aisselle ?", next:null, category:"hygiene", weight:4 },
+  { id:"q149", type:"yesno", text:"As-tu déjà léché / mordu une oreille ?", next:null, category:"hygiene", weight:3 },
+  { id:"q150", type:"yesno", text:"As-tu déjà utilisé des sous-vêtements très sales / tachés de sperme pour te branler ?", next:null, category:"hygiene", weight:5 },
+  { id:"q151", type:"yesno", text:"As-tu déjà goûté ton propre cérumen, morve ou autre truc dégueu par curiosité ?", next:null, category:"hygiene", weight:4 },
+
+  // CRIME - q152 à q159
+  { id:"q152", type:"yesno", text:"As-tu déjà agressé physiquement quelqu’un (coup de poing, strangulation, gifle violente) ?", next:null, category:"crime", weight:12 },
+  { id:"q153", type:"yesno", text:"As-tu déjà menacé quelqu’un avec un couteau, une arme ou un objet contondant ?", next:null, category:"crime", weight:12 },
+  { id:"q154", type:"yesno", text:"As-tu déjà volé dans un magasin ou chez quelqu’un sans que ce soit pour de la drogue ?", next:null, category:"crime", weight:8 },
+  { id:"q155", type:"yesno", text:"As-tu déjà forcé quelqu’un à un acte sexuel (même « elle a pas dit oui mais elle a joui ») ?", next:null, category:"crime", weight:15 },
+  { id:"q156", type:"yesno", text:"As-tu déjà filmé ou pris en photo quelqu’un nu / en train de baiser sans son accord ?", next:null, category:"crime", weight:10 },
+  { id:"q157", type:"yesno", text:"As-tu déjà fait du chantage (argent, sexe, photos intimes) ?", next:null, category:"crime", weight:10 },
+  { id:"q158", type:"yesno", text:"As-tu déjà incendié / détruit volontairement quelque chose qui ne t’appartenait pas ?", next:null, category:"crime", weight:10 },
+  { id:"q159", type:"yesno", text:"As-tu déjà participé à une bagarre avec arme blanche ?", next:null, category:"crime", weight:12 },
+
+  // PSYCHOLOGIQUE - q160 à q172
+  { id:"q160", type:"yesno", text:"As-tu déjà eu des pensées suicidaires récurrentes ou un plan concret ?", next:null, category:"psychologie", weight:10 },
+  { id:"q161", type:"yesno", text:"As-tu déjà eu envie de tuer quelqu’un (même juste une pensée très détaillée) ?", next:null, category:"psychologie", weight:12 },
+  { id:"q162", type:"yesno", text:"As-tu déjà eu des hallucinations auditives / visuelles sans drogue ?", next:null, category:"psychologie", weight:9 },
+  { id:"q163", type:"yesno", text:"As-tu déjà eu des crises de dissociation (tu te sens hors de ton corps, comme un robot) ?", next:null, category:"psychologie", weight:8 },
+  { id:"q164", type:"yesno", text:"As-tu déjà eu des pulsions de te mutiler (te couper, te brûler, te taper) ?", next:null, category:"psychologie", weight:9 },
+  { id:"q165", type:"yesno", text:"As-tu déjà fait du mal volontairement à un animal (pas par accident) ?", next:null, category:"psychologie", weight:12 },
+  { id:"q166", type:"yesno", text:"As-tu déjà eu des crises de rage où tu cassais tout autour de toi ?", next:null, category:"psychologie", weight:8 },
+  { id:"q167", type:"yesno", text:"As-tu déjà menti pendant des mois / années sur ta vie entière à ton entourage ?", next:null, category:"psychologie", weight:7 },
+  { id:"q168", type:"yesno", text:"As-tu déjà eu des idées de vengeance très violentes et détaillées ?", next:null, category:"psychologie", weight:8 },
+  { id:"q169", type:"yesno", text:"As-tu déjà eu l’impression que quelqu’un te contrôlait mentalement ou te persécutait ?", next:null, category:"psychologie", weight:7 },
+  { id:"q170", type:"yesno", text:"T’es-tu déjà fait harceler (harcèlement moral, stalking, cyberharcèlement) ?", next:null, category:"psychologie", weight:6 },
+  { id:"q171", type:"yesno", text:"T’es-tu déjà fait tabasser (vraiment frappé violemment) ?", next:null, category:"psychologie", weight:7 },
+  { id:"q172", type:"yesno", text:"T’es-tu déjà dit que tu ne pouvais pas dire non à un rapport sexuel ?", next:null, category:"psychologie", weight:8 }
 ];
 
 const CATEGORIES = {
@@ -336,7 +413,31 @@ const CATEGORY_MAP = {
   "q89":"crime","q90":"exhibition","q91":"hygiene","q92":"hygiene","q93":"hygiene",
   "q94":"sexe_classique","q95":"sexe_classique","q96":"psychologie","q97":"porno","q98":"psychologie",
   "q99":"crime","q100":"crime","q101":"exhibition","q102":"sexe_classique","q103":"bdsm",
-  "q104":"sexe_classique","q105":"sexe_classique","q106":"hygiene","q107":"famille","q108":"sexe_classique"
+  "q104":"sexe_classique","q105":"sexe_classique","q106":"hygiene","q107":"famille","q108":"sexe_classique",
+  // DROGUE
+  "q109":"drogue","q110":"drogue","q111":"drogue","q112":"drogue","q113":"drogue",
+  "q114":"drogue","q115":"drogue","q116":"drogue","q117":"drogue","q118":"drogue",
+  "q119":"drogue","q120":"drogue","q121":"drogue","q122":"drogue","q123":"drogue",
+  "q124":"drogue","q124a":"drogue","q125":"drogue","q126":"drogue","q127":"drogue",
+
+  // HOMOSEXUALITÉ
+  "q128":"homosexuel","q129":"homosexuel","q130":"homosexuel","q131":"homosexuel","q132":"homosexuel",
+  "q133":"homosexuel","q134":"homosexuel","q135":"homosexuel","q136":"homosexuel",
+  "q137":"homosexuel","q137a":"homosexuel","q138":"homosexuel",
+
+  // DÉGUEULASSE / HYGIENE
+  "q139":"hygiene","q139a":"hygiene","q140":"hygiene","q141":"hygiene","q142":"hygiene",
+  "q143":"hygiene","q144":"hygiene","q145":"hygiene","q146":"hygiene","q147":"hygiene",
+  "q148":"hygiene","q149":"hygiene","q150":"hygiene","q151":"hygiene",
+
+  // CRIME
+  "q152":"crime","q153":"crime","q154":"crime","q155":"crime","q156":"crime",
+  "q157":"crime","q158":"crime","q159":"crime",
+
+  // PSYCHOLOGIQUE
+  "q160":"psychologie","q161":"psychologie","q162":"psychologie","q163":"psychologie","q164":"psychologie",
+  "q165":"psychologie","q166":"psychologie","q167":"psychologie","q168":"psychologie","q169":"psychologie",
+  "q170":"psychologie","q171":"psychologie","q172":"psychologie"
 };
 
 Object.keys(CATEGORY_MAP).forEach(id => {
